@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>RealityChecking Games — Player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090f;
+    --surface: #13131f;
+    --surface2: #1c1c2e;
+    --border: #2a2a40;
+    --accent: #f0c040;
+    --accent2: #e05a2b;
+    --green: #3ddc84;
+    --red: #ff4757;
+    --blue: #4fa3e0;
+    --purple: #a855f7;
+    --text: #f0f0ff;
+    --muted: #6b6b8a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── SCREENS ─── */
+  .screen { display: none; flex-direction: column; height: 100%; }
+  .screen.active { display: flex; }
+
+  /* ─── JOIN SCREEN ─── */
+  #join {
+    padding: 32px 24px;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 50% 0%, #1a1030 0%, var(--bg) 70%);
+  }
+  .join-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .join-logo span { color: var(--accent2); }
+  .join-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 400px;
+  }
+  .join-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .field { margin-bottom: 20px; }
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    padding: 14px 16px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  input:focus { border-color: var(--accent); }
+  input.code-input {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    padding: 16px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn:active { transform: scale(0.97); opacity: 0.9; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-green { background: var(--green); color: #000; }
+
+  .error-msg {
+    background: #2a0d0d;
+    border: 1px solid var(--red);
+    border-radius: 8px;
+    color: var(--red);
+    font-size: 14px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  /* ─── LOBBY / WAITING ─── */
+  #waiting {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 24px;
+    background: radial-gradient(ellipse at 50% 0%, #1a1030 0%, var(--bg) 70%);
+  }
+  .player-name-badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    padding: 10px 24px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 32px;
+    display: inline-block;
+  }
+  .waiting-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 4px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .waiting-sub { color: var(--muted); font-size: 16px; margin-bottom: 40px; }
+  .pulse-ring {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    margin: 0 auto;
+    animation: ringPulse 1.5s ease-out infinite;
+  }
+  @keyframes ringPulse {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+  .pulse-inner {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: var(--accent);
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .pulse-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto; }
+
+  /* ─── QUESTION SCREEN ─── */
+  #question {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .q-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .q-header-name { font-weight: 600; font-size: 15px; color: var(--accent); }
+  .q-header-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+  .q-header-num span { color: var(--text); }
+
+  .question-body {
+    padding: 24px 20px;
+    flex: 1;
+  }
+  .q-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 14px;
+  }
+  .q-text {
+    font-size: clamp(18px, 4.5vw, 24px);
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 28px;
+    color: var(--text);
+  }
+
+  .options-list { display: flex; flex-direction: column; gap: 12px; }
+  .option-btn {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+    text-align: left;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+  }
+  .option-btn:active { transform: scale(0.98); }
+  .option-btn.selected { border-color: var(--accent); background: #1e1a0a; }
+  .option-btn.correct-reveal { border-color: var(--green); background: #0d2a1a; color: var(--green); }
+  .option-btn.wrong-reveal { border-color: var(--red); background: #1a0808; color: var(--red); opacity: 0.6; }
+  .opt-key {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--accent);
+    width: 28px;
+    flex-shrink: 0;
+  }
+  .option-btn.selected .opt-key { color: var(--accent); }
+
+  .open-answer-area { display: flex; flex-direction: column; gap: 12px; }
+  .open-input {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    padding: 16px 18px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .open-input:focus { border-color: var(--accent); }
+
+  .submit-area {
+    padding: 16px 20px;
+    flex-shrink: 0;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ─── SUBMITTED STATE ─── */
+  #submitted {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 24px;
+  }
+  .submitted-icon { font-size: 64px; margin-bottom: 20px; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+  .submitted-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  .submitted-title.correct { color: var(--green); }
+  .submitted-title.wrong { color: var(--red); }
+  .submitted-title.pending { color: var(--accent); }
+  .submitted-answer {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: inline-block;
+  }
+  .submitted-waiting { color: var(--muted); font-size: 15px; margin-top: 16px; }
+  .flip-hint {
+    margin-top: 32px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .flip-hint strong { color: var(--text); }
+
+  /* ─── REVEAL STATE (on phone) ─── */
+  #player-reveal {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 24px;
+    background: radial-gradient(ellipse at 50% 50%, #0d2218 0%, var(--bg) 70%);
+  }
+  .reveal-icon { font-size: 56px; margin-bottom: 16px; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+  .reveal-result {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  .reveal-result.correct { color: var(--green); }
+  .reveal-result.wrong { color: var(--red); }
+  .reveal-correct-answer {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .reveal-correct-answer span { color: var(--text); font-weight: 600; }
+  .my-answer-row { font-size: 15px; color: var(--muted); }
+  .my-answer-row span { color: var(--text); font-weight: 600; }
+  .next-hint {
+    margin-top: 40px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    animation: blinkAnim 1.5s ease-in-out infinite;
+  }
+  @keyframes blinkAnim { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* ─── FINISHED ─── */
+  #player-finished {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 24px;
+    background: radial-gradient(ellipse at 50% 50%, #1a1030 0%, var(--bg) 70%);
+  }
+  .finished-trophy { font-size: 80px; margin-bottom: 16px; animation: bounce 1s ease-in-out infinite alternate; }
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-16px); } }
+  .finished-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .finished-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .finished-score-label { color: var(--muted); font-size: 15px; margin-bottom: 32px; }
+  .winner-announcement {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px 24px;
+    margin-bottom: 24px;
+  }
+  .winner-announcement .w-label { font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+  .winner-announcement .w-name { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- JOIN -->
+<div class="screen active" id="join">
+  <div class="join-logo">Reality<span>Checking</span> Games</div>
+  <div class="join-card">
+    <div class="join-title">JOIN GAME</div>
+    <div class="error-msg" id="joinError"></div>
+    <div class="field">
+      <label>Game Code</label>
+      <input class="code-input" id="joinCode" type="text" placeholder="XXXXXX" maxlength="6" autocomplete="off" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label>Your Name</label>
+      <input id="joinName" type="text" placeholder="Enter your name" autocomplete="name">
+    </div>
+    <button class="btn" onclick="joinGame()">JOIN →</button>
+  </div>
+</div>
+
+<!-- WAITING LOBBY -->
+<div class="screen" id="waiting">
+  <div class="player-name-badge" id="waitingName">Player</div>
+  <div class="waiting-title">GET READY</div>
+  <div class="waiting-sub">Waiting for the host to start the game...</div>
+  <div class="pulse-wrap">
+    <div class="pulse-ring"></div>
+    <div class="pulse-inner"></div>
+  </div>
+  <p style="margin-top: 32px; color: var(--muted); font-size: 13px;">Keep this screen open</p>
+</div>
+
+<!-- QUESTION -->
+<div class="screen" id="question">
+  <div class="q-header">
+    <div class="q-header-name" id="qHeaderName">Player</div>
+    <div class="q-header-num">Q <span id="qHeaderNum">1</span></div>
+  </div>
+  <div class="question-body">
+    <div class="q-label">Question</div>
+    <div class="q-text" id="qText">Loading...</div>
+    <div id="answerArea"></div>
+  </div>
+  <div class="submit-area">
+    <button class="btn" id="submitBtn" onclick="submitAnswer()" disabled>SELECT AN ANSWER</button>
+  </div>
+</div>
+
+<!-- SUBMITTED / WAITING FOR REVEAL -->
+<div class="screen" id="submitted">
+  <div class="submitted-icon" id="submittedIcon">✅</div>
+  <div class="submitted-title pending" id="submittedTitle">LOCKED IN</div>
+  <div class="submitted-answer" id="submittedAnswer">—</div>
+  <div class="submitted-waiting">Waiting for the host to reveal...</div>
+  <div class="flip-hint">
+    <strong>When told to flip:</strong> show your phone face-down, then turn it over at the same time as everyone else!
+  </div>
+</div>
+
+<!-- REVEAL ON PHONE -->
+<div class="screen" id="player-reveal">
+  <div class="reveal-icon" id="revealIcon">🎯</div>
+  <div class="reveal-result" id="revealResult">—</div>
+  <div class="reveal-correct-answer">Correct answer: <span id="revealCorrect">—</span></div>
+  <div class="my-answer-row">Your answer: <span id="revealMine">—</span></div>
+  <div class="next-hint">Waiting for next question...</div>
+</div>
+
+<!-- GAME FINISHED -->
+<div class="screen" id="player-finished">
+  <div class="finished-trophy">🏆</div>
+  <div class="finished-title">GAME OVER</div>
+  <div class="finished-score" id="myScore">0</div>
+  <div class="finished-score-label">correct answers</div>
+  <div class="winner-announcement" id="winnerBox" style="display:none">
+    <div class="w-label">Tonight's Winner</div>
+    <div class="w-name" id="finishedWinner">—</div>
+  </div>
+  <button class="btn btn-ghost" onclick="location.href='/player'" style="max-width:300px; margin-top:16px;">Play Again</button>
+</div>
+
+<script>
+let gameId = null;
+let playerId = null;
+let playerName = null;
+let currentQuestion = null;
+let selectedAnswer = null;
+let myAnswers = {}; // questionId -> {answer, isCorrect}
+let evtSource = null;
+let lastPhase = null;
+
+// Pre-fill from URL
+const params = new URLSearchParams(location.search);
+if (params.get('code')) document.getElementById('joinCode').value = params.get('code').toUpperCase();
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showError(msg) {
+  const el = document.getElementById('joinError');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+async function joinGame() {
+  const code = document.getElementById('joinCode').value.trim().toUpperCase();
+  const name = document.getElementById('joinName').value.trim();
+  if (!code) return showError('Enter a game code');
+  if (!name) return showError('Enter your name');
+
+  document.querySelector('#join .btn').disabled = true;
+  document.querySelector('#join .btn').textContent = 'JOINING...';
+
+  try {
+    const r = await fetch('/api/join', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gameCode: code, playerName: name })
+    });
+    const data = await r.json();
+    if (data.error) {
+      showError(data.error);
+      document.querySelector('#join .btn').disabled = false;
+      document.querySelector('#join .btn').textContent = 'JOIN →';
+      return;
+    }
+    gameId = data.gameId;
+    playerId = data.playerId;
+    playerName = data.playerName;
+
+    document.getElementById('waitingName').textContent = playerName;
+    document.getElementById('qHeaderName').textContent = playerName;
+    showScreen('waiting');
+    connect();
+  } catch (e) {
+    showError('Connection error. Try again.');
+    document.querySelector('#join .btn').disabled = false;
+    document.querySelector('#join .btn').textContent = 'JOIN →';
+  }
+}
+
+function connect() {
+  if (evtSource) evtSource.close();
+  evtSource = new EventSource(`/api/events/${gameId}?role=player&playerId=${playerId}`);
+  evtSource.addEventListener('state', e => applyState(JSON.parse(e.data)));
+  evtSource.onerror = () => setTimeout(connect, 2000);
+}
+
+function applyState(s) {
+  if (!s || !s.game) return;
+  const { game, currentQuestion: q, phase, winner, scores, currentIndex } = s;
+
+  if (phase === 'waiting' || game.status === 'draft') {
+    showScreen('waiting');
+    lastPhase = 'waiting';
+    return;
+  }
+
+  if (phase === 'question' && q) {
+    currentQuestion = q;
+    selectedAnswer = null;
+
+    // Check if already answered
+    const myAnswer = myAnswers[q.id];
+    if (myAnswer) {
+      // Already answered — show submitted
+      document.getElementById('submittedAnswer').textContent = myAnswer.answer;
+      showScreen('submitted');
+    } else {
+      renderQuestion(q, currentIndex);
+      showScreen('question');
+    }
+    lastPhase = 'question';
+    return;
+  }
+
+  if (phase === 'reveal' && q) {
+    const myAnswer = myAnswers[q.id];
+    if (myAnswer) {
+      // Show result on phone
+      document.getElementById('revealCorrect').textContent = q.correct_answer;
+      document.getElementById('revealMine').textContent = myAnswer.answer;
+      if (myAnswer.isCorrect) {
+        document.getElementById('revealIcon').textContent = '🎉';
+        document.getElementById('revealResult').textContent = 'CORRECT!';
+        document.getElementById('revealResult').className = 'reveal-result correct';
+      } else {
+        document.getElementById('revealIcon').textContent = '😬';
+        document.getElementById('revealResult').textContent = 'WRONG';
+        document.getElementById('revealResult').className = 'reveal-result wrong';
+      }
+      showScreen('player-reveal');
+    } else {
+      // Didn't answer — show neutral
+      document.getElementById('revealCorrect').textContent = q.correct_answer;
+      document.getElementById('revealMine').textContent = '(no answer)';
+      document.getElementById('revealIcon').textContent = '😶';
+      document.getElementById('revealResult').textContent = 'MISSED';
+      document.getElementById('revealResult').className = 'reveal-result wrong';
+      showScreen('player-reveal');
+    }
+    lastPhase = 'reveal';
+    return;
+  }
+
+  if (phase === 'finished' || phase === 'winner') {
+    // Calculate my score
+    const myScoreData = scores ? scores.find(s => s.id === playerId) : null;
+    document.getElementById('myScore').textContent = myScoreData ? myScoreData.correct : 0;
+
+    if (winner) {
+      document.getElementById('winnerBox').style.display = 'block';
+      document.getElementById('finishedWinner').textContent = winner;
+    }
+    showScreen('player-finished');
+    lastPhase = 'finished';
+    return;
+  }
+}
+
+function renderQuestion(q, idx) {
+  document.getElementById('qText').textContent = q.question_text;
+  document.getElementById('qHeaderNum').textContent = idx + 1;
+  selectedAnswer = null;
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.textContent = 'SELECT AN ANSWER';
+  submitBtn.disabled = true;
+
+  const area = document.getElementById('answerArea');
+  const letters = ['A','B','C','D'];
+  const options = [q.option_a, q.option_b, q.option_c, q.option_d].filter(Boolean);
+
+  if (options.length > 0) {
+    // Multiple choice
+    area.innerHTML = `<div class="options-list">
+      ${options.map((opt, i) => `
+        <button class="option-btn" onclick="selectOption(this, '${letters[i]}')" data-val="${letters[i]}">
+          <span class="opt-key">${letters[i]}</span>
+          <span>${opt}</span>
+        </button>
+      `).join('')}
+    </div>`;
+  } else {
+    // Open answer
+    area.innerHTML = `
+      <div class="open-answer-area">
+        <input class="open-input" id="openAnswer" type="text" placeholder="Type your answer..."
+          oninput="handleOpenInput(this.value)"
+          onkeydown="if(event.key==='Enter' && !document.getElementById('submitBtn').disabled) submitAnswer()">
+      </div>`;
+    setTimeout(() => document.getElementById('openAnswer')?.focus(), 100);
+  }
+}
+
+function selectOption(btn, val) {
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedAnswer = val;
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = false;
+  submitBtn.textContent = `LOCK IN ${val} →`;
+}
+
+function handleOpenInput(val) {
+  selectedAnswer = val.trim();
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = !selectedAnswer;
+  submitBtn.textContent = selectedAnswer ? 'LOCK IN ANSWER →' : 'TYPE YOUR ANSWER';
+}
+
+async function submitAnswer() {
+  if (!selectedAnswer || !currentQuestion) return;
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'SUBMITTING...';
+
+  try {
+    const r = await fetch(`/api/games/${gameId}/answers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        questionId: currentQuestion.id,
+        playerId,
+        answer: selectedAnswer
+      })
+    });
+    const data = await r.json();
+
+    myAnswers[currentQuestion.id] = { answer: selectedAnswer, isCorrect: data.isCorrect };
+    document.getElementById('submittedAnswer').textContent = selectedAnswer;
+    showScreen('submitted');
+  } catch (e) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'TRY AGAIN';
+  }
+}
+
+// Handle keyboard join
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('joinName').addEventListener('keydown', e => {
+    if (e.key === 'Enter') joinGame();
+  });
+  document.getElementById('joinCode').addEventListener('input', function() {
+    this.value = this.value.toUpperCase();
+  });
+});
+</script>
+</body>
+</html>

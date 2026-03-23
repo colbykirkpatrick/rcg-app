@@ -1,0 +1,21 @@
+{
+  "name": "reality-checking-games",
+  "version": "1.0.0",
+  "description": "RealityChecking Games — Live in-person trivia platform",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "lowdb": "1.0.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.0",
+    "xlsx": "^0.18.5"
+  }
+}

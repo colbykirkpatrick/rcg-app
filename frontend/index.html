@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RealityChecking Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07070f;
+    --surface: #111120;
+    --border: #2a2a3d;
+    --accent: #f0c040;
+    --accent2: #e05a2b;
+    --green: #3ddc84;
+    --text: #f0f0ff;
+    --muted: #6b6b8a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(240,192,64,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(224,90,43,0.06) 0%, transparent 50%);
+  }
+  .center { text-align: center; max-width: 600px; padding: 40px 24px; }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 10vw, 80px);
+    letter-spacing: 4px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .logo span { color: var(--accent2); }
+  .tagline { color: var(--muted); font-size: 14px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 56px; }
+  .nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 480px) { .nav-grid { grid-template-columns: 1fr; } }
+  .nav-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+    display: block;
+  }
+  .nav-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .nav-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+  .nav-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .nav-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .admin-card:hover { border-color: var(--accent2); }
+  .host-card:hover { border-color: var(--green); }
+  .player-card:hover { border-color: var(--accent); }
+  .admin-card .nav-title { color: var(--accent2); }
+  .host-card .nav-title { color: var(--green); }
+  .player-card .nav-title { color: var(--accent); }
+  .footer { color: var(--muted); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+<div class="center">
+  <div class="logo">Reality<span>Checking</span><br>Games</div>
+  <div class="tagline">Trivia Challenge Platform</div>
+  <div class="nav-grid">
+    <a href="/admin" class="nav-card admin-card">
+      <span class="nav-icon">⚙️</span>
+      <div class="nav-title">Admin</div>
+      <div class="nav-desc">Create games, import questions & players, manage everything</div>
+    </a>
+    <a href="/host" class="nav-card host-card">
+      <span class="nav-icon">🖥️</span>
+      <div class="nav-title">Host</div>
+      <div class="nav-desc">The big screen everyone watches during the game</div>
+    </a>
+    <a href="/player" class="nav-card player-card">
+      <span class="nav-icon">📱</span>
+      <div class="nav-title">Player</div>
+      <div class="nav-desc">Players join on their phones to answer questions</div>
+    </a>
+  </div>
+  <div class="footer">RealityChecking Games &nbsp;·&nbsp; Built for in-person play</div>
+</div>
+</body>
+</html>

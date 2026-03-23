@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RCG Admin — RealityChecking Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3d;
+    --accent: #f0c040;
+    --accent2: #e05a2b;
+    --green: #3ddc84;
+    --red: #ff4757;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); letter-spacing: 2px; }
+  .logo span { color: var(--accent2); }
+  .badge { background: var(--accent2); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; letter-spacing: 1px; text-transform: uppercase; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px; }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 80px; }
+  label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+
+  .btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: var(--red); color: #fff; }
+  .btn-sm { font-size: 13px; padding: 6px 14px; }
+  .btn-green { background: var(--green); }
+
+  .game-list { display: flex; flex-direction: column; gap: 12px; }
+  .game-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s;
+  }
+  .game-item:hover { border-color: var(--accent); }
+  .game-item.selected { border-color: var(--accent); background: #1e1a0a; }
+  .game-name { font-weight: 600; font-size: 16px; flex: 1; }
+  .game-meta { color: var(--muted); font-size: 13px; display: flex; gap: 12px; }
+  .pill { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; font-size: 11px; font-family: 'DM Mono', monospace; }
+  .pill.active { background: #1a2e1a; border-color: var(--green); color: var(--green); }
+  .pill.finished { background: #1a1020; border-color: #9b59b6; color: #9b59b6; }
+
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .tab {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .q-list { display: flex; flex-direction: column; gap: 10px; }
+  .q-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .q-num { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); width: 28px; flex-shrink: 0; }
+  .q-text { flex: 1; }
+  .q-question { font-weight: 500; margin-bottom: 6px; }
+  .q-answer { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--green); }
+  .q-options { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .p-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .p-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .p-chip button { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; line-height: 1; padding: 0; }
+  .p-chip button:hover { color: var(--red); }
+
+  .import-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .import-zone:hover, .import-zone.dragover { border-color: var(--accent); background: #1a160a; }
+  .import-zone .icon { font-size: 36px; margin-bottom: 8px; }
+  .import-zone p { color: var(--muted); font-size: 14px; }
+
+  .alert { padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px; font-size: 14px; }
+  .alert-success { background: #0d2a1a; border: 1px solid var(--green); color: var(--green); }
+  .alert-error { background: #2a0d0d; border: 1px solid var(--red); color: var(--red); }
+
+  .qr-box {
+    background: white;
+    border-radius: 8px;
+    padding: 12px;
+    display: inline-block;
+  }
+  .join-info { text-align: center; }
+  .join-code {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--accent);
+    letter-spacing: 8px;
+    line-height: 1;
+    margin: 8px 0;
+  }
+  .join-url { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); }
+
+  .host-btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+
+  .form-row { display: flex; gap: 12px; align-items: flex-end; margin-bottom: 16px; }
+  .form-row .field { flex: 1; }
+
+  .empty-state { text-align: center; padding: 48px; color: var(--muted); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+  #no-game-selected { text-align: center; padding: 60px; color: var(--muted); }
+  #no-game-selected .big { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--border); letter-spacing: 4px; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    width: 90%;
+    max-width: 560px;
+  }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent); margin-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Reality<span>Checking</span> Games</div>
+  <div class="badge">Admin</div>
+</header>
+
+<div class="container">
+  <div class="grid-2">
+
+    <!-- LEFT: Game List -->
+    <div>
+      <div class="section-title">Games</div>
+      <div class="card">
+        <div class="form-row">
+          <div class="field">
+            <label>New Game Name</label>
+            <input id="newGameName" type="text" placeholder="Friday Night Trivia Vol. 3">
+          </div>
+          <button class="btn" onclick="createGame()">+ Create</button>
+        </div>
+        <div id="gameList" class="game-list">
+          <div class="empty-state"><div class="icon">🎮</div><p>No games yet. Create one!</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Game Detail -->
+    <div>
+      <div class="section-title">Game Setup</div>
+      <div id="no-game-selected">
+        <div class="big">←</div>
+        <p>Select a game to edit</p>
+      </div>
+
+      <div id="gameDetail" style="display:none">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('questions')">Questions</div>
+          <div class="tab" onclick="switchTab('players')">Players</div>
+          <div class="tab" onclick="switchTab('launch')">Launch</div>
+        </div>
+
+        <!-- QUESTIONS TAB -->
+        <div id="tab-questions" class="tab-content active">
+          <div id="alertQ"></div>
+
+          <div class="import-zone" id="qDropZone" onclick="document.getElementById('qFileInput').click()">
+            <div class="icon">📊</div>
+            <p><strong>Import from Spreadsheet</strong></p>
+            <p>Click or drag .xlsx / .csv — columns: Question, A, B, C, D, Correct Answer</p>
+          </div>
+          <input type="file" id="qFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="importQuestions(this.files[0])">
+
+          <div style="margin:16px 0; display:flex; gap:12px; align-items:center;">
+            <button class="btn btn-ghost btn-sm" onclick="showAddQuestion()">+ Add Manual</button>
+            <label style="margin:0; display:flex; align-items:center; gap:6px; cursor:pointer; font-size:12px; color:var(--muted)">
+              <input type="checkbox" id="replaceQ"> Replace existing
+            </label>
+          </div>
+
+          <div id="questionList" class="q-list"></div>
+        </div>
+
+        <!-- PLAYERS TAB -->
+        <div id="tab-players" class="tab-content">
+          <div id="alertP"></div>
+
+          <div class="import-zone" onclick="document.getElementById('pFileInput').click()">
+            <div class="icon">👥</div>
+            <p><strong>Import Players from Spreadsheet</strong></p>
+            <p>Click to upload .xlsx / .csv — column: Name</p>
+          </div>
+          <input type="file" id="pFileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="importPlayers(this.files[0])">
+
+          <div style="margin: 16px 0;">
+            <div class="form-row">
+              <div class="field">
+                <label>Add Player Manually</label>
+                <input id="newPlayerName" type="text" placeholder="Player name" onkeydown="if(event.key==='Enter') addPlayer()">
+              </div>
+              <button class="btn btn-sm" onclick="addPlayer()">Add</button>
+            </div>
+          </div>
+
+          <div id="playerList" class="p-list"></div>
+          <div id="playerCount" style="color:var(--muted); font-size:13px;"></div>
+        </div>
+
+        <!-- LAUNCH TAB -->
+        <div id="tab-launch" class="tab-content">
+          <div class="join-info">
+            <p style="color:var(--muted); font-size:13px; text-transform:uppercase; letter-spacing:1px;">Join Code</p>
+            <div class="join-code" id="joinCode">------</div>
+            <div class="join-url" id="joinUrl"></div>
+            <p style="color:var(--muted); font-size:12px; margin-top:8px;">Players go to this URL and enter their name</p>
+          </div>
+
+          <hr style="border-color:var(--border); margin: 24px 0;">
+
+          <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+            <a id="hostLink" href="#" target="_blank" class="btn btn-green">🖥 Open Host Screen</a>
+            <button class="btn btn-ghost" onclick="copyJoinUrl()">📋 Copy Join Link</button>
+          </div>
+
+          <hr style="border-color:var(--border); margin: 24px 0;">
+
+          <div>
+            <label>Game Name</label>
+            <div class="form-row" style="margin-top:6px;">
+              <div class="field">
+                <input id="editGameName" type="text" placeholder="Game name">
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="updateGameName()">Save</button>
+            </div>
+          </div>
+
+          <button class="btn btn-danger btn-sm" onclick="deleteGame()" style="margin-top:8px;">🗑 Delete Game</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Question Modal -->
+<div class="modal-overlay" id="addQModal">
+  <div class="modal">
+    <div class="modal-title">Add Question</div>
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <div>
+        <label>Question *</label>
+        <textarea id="aqText" placeholder="What is...?"></textarea>
+      </div>
+      <div class="grid-2">
+        <div><label>Option A</label><input id="aqA" type="text" placeholder="Option A"></div>
+        <div><label>Option B</label><input id="aqB" type="text" placeholder="Option B"></div>
+        <div><label>Option C</label><input id="aqC" type="text" placeholder="Option C"></div>
+        <div><label>Option D</label><input id="aqD" type="text" placeholder="Option D"></div>
+      </div>
+      <div>
+        <label>Correct Answer * (e.g. "A" or "Paris" — must match exactly)</label>
+        <input id="aqCorrect" type="text" placeholder="A">
+      </div>
+    </div>
+    <div style="display:flex; gap:12px; margin-top:24px; justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeAddQuestion()">Cancel</button>
+      <button class="btn" onclick="saveQuestion()">Save Question</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '';
+let currentGameId = null;
+let games = [];
+
+async function api(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(API + path, opts);
+  return r.json();
+}
+
+async function loadGames() {
+  games = await api('GET', '/api/games');
+  renderGameList();
+}
+
+function renderGameList() {
+  const el = document.getElementById('gameList');
+  if (!games.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">🎮</div><p>No games yet. Create one!</p></div>';
+    return;
+  }
+  el.innerHTML = games.map(g => `
+    <div class="game-item ${g.id === currentGameId ? 'selected' : ''}" onclick="selectGame('${g.id}')">
+      <div>
+        <div class="game-name">${g.name}</div>
+        <div class="game-meta">
+          <span>${g.question_count} Q</span>
+          <span>${g.player_count} Players</span>
+        </div>
+      </div>
+      <span class="pill ${g.status}">${g.status}</span>
+    </div>
+  `).join('');
+}
+
+async function createGame() {
+  const name = document.getElementById('newGameName').value.trim();
+  if (!name) return alert('Enter a game name');
+  await api('POST', '/api/games', { name });
+  document.getElementById('newGameName').value = '';
+  await loadGames();
+  // Auto-select newest
+  if (games.length) selectGame(games[0].id);
+}
+
+async function selectGame(id) {
+  currentGameId = id;
+  renderGameList();
+  document.getElementById('no-game-selected').style.display = 'none';
+  document.getElementById('gameDetail').style.display = 'block';
+
+  const game = games.find(g => g.id === id);
+  const code = id.substring(0, 6).toUpperCase();
+  document.getElementById('joinCode').textContent = code;
+  document.getElementById('editGameName').value = game?.name || '';
+
+  const origin = window.location.origin;
+  document.getElementById('joinUrl').textContent = `${origin}/player?code=${code}`;
+  document.getElementById('hostLink').href = `/host?game=${id}`;
+
+  await loadQuestions();
+  await loadPlayers();
+}
+
+async function loadQuestions() {
+  const qs = await api('GET', `/api/games/${currentGameId}/questions`);
+  const el = document.getElementById('questionList');
+  if (!qs.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">❓</div><p>No questions yet. Import or add manually.</p></div>';
+    return;
+  }
+  el.innerHTML = qs.map((q, i) => `
+    <div class="q-item">
+      <div class="q-num">${i+1}</div>
+      <div class="q-text">
+        <div class="q-question">${q.question_text}</div>
+        ${q.option_a ? `<div class="q-options">A: ${q.option_a} &nbsp; B: ${q.option_b || ''} &nbsp; C: ${q.option_c || ''} &nbsp; D: ${q.option_d || ''}</div>` : ''}
+        <div class="q-answer">✓ ${q.correct_answer}</div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${q.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+async function deleteQuestion(qid) {
+  if (!confirm('Delete this question?')) return;
+  await api('DELETE', `/api/games/${currentGameId}/questions/${qid}`);
+  await loadQuestions();
+}
+
+async function importQuestions(file) {
+  const replace = document.getElementById('replaceQ').checked;
+  const fd = new FormData();
+  fd.append('file', file);
+  const url = `/api/games/${currentGameId}/import?replace=${replace}`;
+  const r = await fetch(url, { method: 'POST', body: fd });
+  const data = await r.json();
+  const alertEl = document.getElementById('alertQ');
+  if (data.error) {
+    alertEl.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+  } else {
+    alertEl.innerHTML = `<div class="alert alert-success">✓ Imported ${data.imported} questions</div>`;
+    setTimeout(() => alertEl.innerHTML = '', 4000);
+  }
+  await loadQuestions();
+  await loadGames();
+}
+
+async function importPlayers(file) {
+  const fd = new FormData();
+  fd.append('file', file);
+  const r = await fetch(`/api/games/${currentGameId}/import-players?replace=false`, { method: 'POST', body: fd });
+  const data = await r.json();
+  const alertEl = document.getElementById('alertP');
+  if (data.error) {
+    alertEl.innerHTML = `<div class="alert alert-error">${data.error}</div>`;
+  } else {
+    alertEl.innerHTML = `<div class="alert alert-success">✓ Imported ${data.imported} players</div>`;
+    setTimeout(() => alertEl.innerHTML = '', 4000);
+  }
+  await loadPlayers();
+  await loadGames();
+}
+
+async function loadPlayers() {
+  const players = await api('GET', `/api/games/${currentGameId}/players`);
+  const el = document.getElementById('playerList');
+  if (!players.length) {
+    el.innerHTML = '<div style="color:var(--muted); font-size:13px;">No players yet.</div>';
+    document.getElementById('playerCount').textContent = '';
+    return;
+  }
+  el.innerHTML = players.map(p => `
+    <div class="p-chip">
+      ${p.name}
+      <button onclick="deletePlayer('${p.id}')">×</button>
+    </div>
+  `).join('');
+  document.getElementById('playerCount').textContent = `${players.length} players registered`;
+}
+
+async function addPlayer() {
+  const name = document.getElementById('newPlayerName').value.trim();
+  if (!name || !currentGameId) return;
+  await api('POST', `/api/games/${currentGameId}/players`, { name });
+  document.getElementById('newPlayerName').value = '';
+  await loadPlayers();
+  await loadGames();
+}
+
+async function deletePlayer(pid) {
+  await api('DELETE', `/api/games/${currentGameId}/players/${pid}`);
+  await loadPlayers();
+  await loadGames();
+}
+
+async function updateGameName() {
+  const name = document.getElementById('editGameName').value.trim();
+  if (!name) return;
+  await api('PUT', `/api/games/${currentGameId}`, { name });
+  await loadGames();
+}
+
+async function deleteGame() {
+  if (!confirm('Delete this game and all its data?')) return;
+  await api('DELETE', `/api/games/${currentGameId}`);
+  currentGameId = null;
+  document.getElementById('no-game-selected').style.display = 'block';
+  document.getElementById('gameDetail').style.display = 'none';
+  await loadGames();
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const tabs = ['questions','players','launch'];
+    t.classList.toggle('active', tabs[i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(tc => {
+    tc.classList.toggle('active', tc.id === `tab-${name}`);
+  });
+}
+
+function showAddQuestion() {
+  document.getElementById('addQModal').classList.add('open');
+}
+function closeAddQuestion() {
+  document.getElementById('addQModal').classList.remove('open');
+  ['aqText','aqA','aqB','aqC','aqD','aqCorrect'].forEach(id => document.getElementById(id).value = '');
+}
+async function saveQuestion() {
+  const data = {
+    question_text: document.getElementById('aqText').value.trim(),
+    option_a: document.getElementById('aqA').value.trim() || null,
+    option_b: document.getElementById('aqB').value.trim() || null,
+    option_c: document.getElementById('aqC').value.trim() || null,
+    option_d: document.getElementById('aqD').value.trim() || null,
+    correct_answer: document.getElementById('aqCorrect').value.trim()
+  };
+  if (!data.question_text || !data.correct_answer) return alert('Question and correct answer required');
+  await api('POST', `/api/games/${currentGameId}/questions`, data);
+  closeAddQuestion();
+  await loadQuestions();
+}
+
+function copyJoinUrl() {
+  const url = document.getElementById('joinUrl').textContent;
+  navigator.clipboard.writeText(url).then(() => alert('Copied!'));
+}
+
+// Drag and drop
+const qDrop = document.getElementById('qDropZone');
+qDrop.addEventListener('dragover', e => { e.preventDefault(); qDrop.classList.add('dragover'); });
+qDrop.addEventListener('dragleave', () => qDrop.classList.remove('dragover'));
+qDrop.addEventListener('drop', e => {
+  e.preventDefault();
+  qDrop.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) importQuestions(e.dataTransfer.files[0]);
+});
+
+// Modal close on outside click
+document.getElementById('addQModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAddQuestion();
+});
+
+loadGames();
+</script>
+</body>
+</html>

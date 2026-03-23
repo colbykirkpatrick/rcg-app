@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Host Screen — RealityChecking Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06060e;
+    --surface: #0f0f1a;
+    --surface2: #16162a;
+    --border: #2a2a3d;
+    --accent: #f0c040;
+    --accent2: #e05a2b;
+    --green: #3ddc84;
+    --red: #ff4757;
+    --blue: #4fa3e0;
+    --text: #f0f0ff;
+    --muted: #6b6b8a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── SCREENS ─── */
+  .screen { display: none; flex-direction: column; height: 100vh; }
+  .screen.active { display: flex; }
+
+  /* ─── LOBBY ─── */
+  #lobby {
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 50% 0%, #1a1030 0%, var(--bg) 70%);
+    position: relative;
+  }
+  .lobby-bg {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(240,192,64,0.03) 60px, rgba(240,192,64,0.03) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(240,192,64,0.03) 60px, rgba(240,192,64,0.03) 61px);
+  }
+  .lobby-inner { text-align: center; position: relative; z-index: 1; }
+  .game-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 120px);
+    letter-spacing: 6px;
+    color: var(--accent);
+    line-height: 1;
+    text-shadow: 0 0 60px rgba(240,192,64,0.4);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { text-shadow: 0 0 60px rgba(240,192,64,0.4); } 50% { text-shadow: 0 0 100px rgba(240,192,64,0.7); } }
+  .subtitle {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16px, 2.5vw, 32px);
+    letter-spacing: 8px;
+    color: var(--accent2);
+    margin-bottom: 48px;
+  }
+  .join-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 48px;
+    margin: 0 auto 32px;
+    display: inline-block;
+  }
+  .join-label { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .join-code-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 8vw, 96px);
+    letter-spacing: 16px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .join-url-big { font-family: 'DM Mono', monospace; font-size: clamp(12px, 1.8vw, 20px); color: var(--muted); margin-top: 8px; }
+  .player-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .player-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: clamp(14px, 1.8vw, 18px);
+    font-weight: 500;
+    transition: all 0.3s;
+    animation: chipIn 0.4s ease-out;
+  }
+  .player-chip.online { border-color: var(--green); background: #0d2a1a; color: var(--green); }
+  @keyframes chipIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+  .lobby-controls {
+    position: fixed; bottom: 24px; right: 24px;
+    display: flex; gap: 12px;
+  }
+
+  /* ─── QUESTION SCREEN ─── */
+  #question-screen {
+    padding: 0;
+    position: relative;
+    background: radial-gradient(ellipse at 50% 100%, #0a1530 0%, var(--bg) 60%);
+  }
+  .host-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .rcg-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent); letter-spacing: 2px; }
+  .q-counter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  .q-counter span { color: var(--accent); }
+  .answer-tally {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .tally-num { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--green); }
+  .progress-bar-outer {
+    flex: 1; height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-inner {
+    height: 100%; background: var(--green);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .question-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+  }
+  .q-phase-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 6px;
+    color: var(--accent2);
+    margin-bottom: 20px;
+  }
+  .question-text {
+    font-size: clamp(24px, 4vw, 56px);
+    font-weight: 700;
+    line-height: 1.25;
+    max-width: 1000px;
+    margin-bottom: 40px;
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+  }
+  .option-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: clamp(16px, 2vw, 24px);
+    transition: all 0.3s;
+  }
+  .option-card.correct { border-color: var(--green); background: #0d2a1a; }
+  .option-card.wrong { opacity: 0.35; }
+  .opt-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--accent);
+    width: 36px;
+    flex-shrink: 0;
+  }
+
+  /* ─── REVEAL SCREEN ─── */
+  #reveal-screen {
+    background: radial-gradient(ellipse at 50% 50%, #0d2218 0%, var(--bg) 60%);
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+  }
+  .reveal-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 8px;
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+  .correct-answer-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 7vw, 96px);
+    color: var(--green);
+    letter-spacing: 4px;
+    text-shadow: 0 0 80px rgba(61,220,132,0.5);
+    margin-bottom: 48px;
+    animation: correctPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes correctPop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .correct-players-section { margin-bottom: 40px; }
+  .got-it-label { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .correct-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 1100px;
+  }
+  .correct-name {
+    background: #0d2a1a;
+    border: 1px solid var(--green);
+    border-radius: 40px;
+    padding: 10px 24px;
+    font-size: clamp(16px, 2.2vw, 26px);
+    font-weight: 600;
+    color: var(--green);
+    animation: nameIn 0.4s ease-out both;
+  }
+  @keyframes nameIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .no-correct { color: var(--muted); font-size: 20px; font-style: italic; }
+
+  /* ─── WINNER SCREEN ─── */
+  #winner-screen {
+    background: var(--bg);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .confetti-canvas { position: absolute; inset: 0; pointer-events: none; }
+  .winner-inner { text-align: center; position: relative; z-index: 1; }
+  .winner-pre {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(18px, 3vw, 40px);
+    letter-spacing: 10px;
+    color: var(--accent2);
+    margin-bottom: 16px;
+    animation: fadeSlideUp 0.6s ease-out both;
+  }
+  .winner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 12vw, 180px);
+    letter-spacing: 4px;
+    color: var(--accent);
+    line-height: 1;
+    text-shadow: 0 0 120px rgba(240,192,64,0.8);
+    animation: winnerFlash 0.5s ease-out both 0.4s, winnerGlow 2s ease-in-out 1s infinite;
+  }
+  @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes winnerFlash { from { transform: scale(0.3) rotate(-5deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+  @keyframes winnerGlow {
+    0%,100% { text-shadow: 0 0 80px rgba(240,192,64,0.6); }
+    50% { text-shadow: 0 0 160px rgba(240,192,64,1), 0 0 40px rgba(255,200,50,1); }
+  }
+  .winner-trophy { font-size: clamp(40px, 8vw, 100px); animation: bounce 1s ease-in-out 1s infinite alternate; display: block; margin-bottom: 16px; }
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
+
+  /* ─── CONTROLS ─── */
+  .controls-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10,10,20,0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    z-index: 50;
+  }
+  .btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-green { background: var(--green); }
+  .btn-orange { background: var(--accent2); color: #fff; }
+  .btn-blue { background: var(--blue); }
+
+  .winner-controls {
+    display: flex; flex-direction: column; gap: 8px; align-items: flex-start;
+  }
+  .winner-select { display: flex; gap: 8px; align-items: center; }
+  select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 8px 12px;
+    outline: none;
+    min-width: 200px;
+  }
+
+  .scoreboard {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    flex: 1;
+  }
+  .score-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-num { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); }
+
+  .connecting { color: var(--muted); font-size: 14px; letter-spacing: 2px; text-align: center; padding: 40px; }
+</style>
+</head>
+<body>
+
+<!-- LOBBY -->
+<div class="screen active" id="lobby">
+  <div class="lobby-bg"></div>
+  <div class="lobby-inner">
+    <div class="subtitle">REALITYCHECKING GAMES PRESENTS</div>
+    <div class="game-title" id="lobbyTitle">LOADING...</div>
+    <div style="margin: 32px 0;">
+      <div class="join-box">
+        <div class="join-label">Join at <span id="lobbyUrl" style="color:var(--text)"></span> — Enter Code:</div>
+        <div class="join-code-big" id="lobbyCode">------</div>
+      </div>
+    </div>
+    <div id="lobbyPlayers" class="player-grid"></div>
+  </div>
+  <div class="lobby-controls">
+    <button class="btn btn-ghost" onclick="window.open('/admin','_blank')">⚙ Admin</button>
+    <button class="btn btn-green" id="startBtn" onclick="startGame()">▶ START GAME</button>
+  </div>
+</div>
+
+<!-- QUESTION SCREEN -->
+<div class="screen" id="question-screen">
+  <div class="host-bar">
+    <div class="rcg-logo">RCG</div>
+    <div class="q-counter">Q <span id="qNum">1</span> / <span id="qTotal">?</span></div>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="qProgress" style="width:0%"></div>
+    </div>
+    <div class="answer-tally">
+      <span class="tally-num" id="answeredCount">0</span>
+      <span>/ <span id="totalPlayers">0</span> answered</span>
+    </div>
+  </div>
+
+  <div class="question-main">
+    <div class="q-phase-label">QUESTION</div>
+    <div class="question-text" id="questionText">Loading...</div>
+    <div class="options-grid" id="optionsGrid"></div>
+  </div>
+
+  <div class="controls-bar">
+    <div class="scoreboard" id="scoreBoard"></div>
+    <button class="btn btn-orange" onclick="revealAnswer()">🔍 REVEAL ANSWER</button>
+  </div>
+</div>
+
+<!-- REVEAL SCREEN -->
+<div class="screen" id="reveal-screen">
+  <div class="question-main" style="max-width:1200px; width:100%;">
+    <div class="reveal-label">✓ CORRECT ANSWER</div>
+    <div class="correct-answer-big" id="revealAnswer">—</div>
+
+    <div class="correct-players-section">
+      <div class="got-it-label">Got it right:</div>
+      <div class="correct-names" id="correctNames"></div>
+    </div>
+  </div>
+
+  <div class="controls-bar">
+    <div class="scoreboard" id="scoreBoard2"></div>
+    <button class="btn btn-green" id="nextBtn" onclick="nextQuestion()">NEXT QUESTION ▶</button>
+  </div>
+</div>
+
+<!-- WINNER SCREEN -->
+<div class="screen" id="winner-screen">
+  <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+  <div class="winner-inner">
+    <span class="winner-trophy">🏆</span>
+    <div class="winner-pre">TONIGHT'S WINNER IS</div>
+    <div class="winner-name" id="winnerName">—</div>
+  </div>
+
+  <div class="controls-bar">
+    <div class="winner-controls">
+      <div class="winner-select">
+        <select id="manualWinner"></select>
+        <button class="btn btn-ghost" style="font-size:14px; padding:8px 16px;" onclick="setManualWinner()">Set Winner</button>
+        <button class="btn btn-orange" onclick="autoWinner()">Auto-Calculate Winner</button>
+      </div>
+    </div>
+    <button class="btn btn-ghost" onclick="backToLobby()">↺ Play Again</button>
+  </div>
+</div>
+
+<script>
+const gameId = new URLSearchParams(location.search).get('game');
+if (!gameId) { document.body.innerHTML = '<div class="connecting">No game ID. Go to <a href="/admin" style="color:#f0c040">/admin</a> to launch a game.</div>'; }
+
+let state = null;
+let evtSource = null;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function connect() {
+  if (evtSource) evtSource.close();
+  evtSource = new EventSource(`/api/events/${gameId}?role=host`);
+  evtSource.addEventListener('state', e => applyState(JSON.parse(e.data)));
+  evtSource.addEventListener('answer_update', e => {
+    const d = JSON.parse(e.data);
+    document.getElementById('answeredCount').textContent = d.answeredCount;
+    document.getElementById('totalPlayers').textContent = d.totalPlayers;
+    const pct = d.totalPlayers > 0 ? Math.round(d.answeredCount / d.totalPlayers * 100) : 0;
+    document.getElementById('qProgress').style.width = pct + '%';
+  });
+  evtSource.addEventListener('players', e => {
+    const { players } = JSON.parse(e.data);
+    renderLobbyPlayers(players);
+  });
+  evtSource.onerror = () => setTimeout(connect, 2000);
+}
+
+function applyState(s) {
+  state = s;
+  if (!s || !s.game) return;
+
+  const { game, currentQuestion, players, scores, correctPlayers, answers, totalQuestions, currentIndex, phase, winner } = s;
+
+  // Lobby
+  document.getElementById('lobbyTitle').textContent = game.name.toUpperCase();
+  const code = gameId.substring(0, 6).toUpperCase();
+  document.getElementById('lobbyCode').textContent = code;
+  document.getElementById('lobbyUrl').textContent = `${location.origin}/player`;
+  renderLobbyPlayers(players);
+
+  // Populate manual winner select
+  const sel = document.getElementById('manualWinner');
+  sel.innerHTML = players.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+
+  if (phase === 'waiting' || game.status === 'draft') {
+    showScreen('lobby');
+  } else if (phase === 'question' && currentQuestion) {
+    showQuestion(currentQuestion, currentIndex, totalQuestions, players, answers, scores);
+    showScreen('question-screen');
+  } else if (phase === 'reveal' && currentQuestion) {
+    showReveal(currentQuestion, correctPlayers, scores, currentIndex, totalQuestions, players);
+    showScreen('reveal-screen');
+  } else if (phase === 'finished' || phase === 'winner') {
+    showWinner(winner, scores);
+    showScreen('winner-screen');
+  }
+}
+
+function renderLobbyPlayers(players) {
+  document.getElementById('lobbyPlayers').innerHTML = players.map(p =>
+    `<div class="player-chip ${p.connected ? 'online' : ''}">${p.name}</div>`
+  ).join('');
+}
+
+function showQuestion(q, idx, total, players, answers, scores) {
+  document.getElementById('qNum').textContent = idx + 1;
+  document.getElementById('qTotal').textContent = total;
+  document.getElementById('questionText').textContent = q.question_text;
+  document.getElementById('totalPlayers').textContent = players.length;
+
+  const answered = answers ? answers.length : 0;
+  document.getElementById('answeredCount').textContent = answered;
+  const pct = players.length > 0 ? Math.round(answered / players.length * 100) : 0;
+  document.getElementById('qProgress').style.width = pct + '%';
+
+  const opts = document.getElementById('optionsGrid');
+  const letters = ['A','B','C','D'];
+  const options = [q.option_a, q.option_b, q.option_c, q.option_d].filter(Boolean);
+
+  if (options.length > 0) {
+    opts.style.display = 'grid';
+    opts.innerHTML = options.map((opt, i) =>
+      `<div class="option-card"><span class="opt-letter">${letters[i]}</span>${opt}</div>`
+    ).join('');
+  } else {
+    opts.style.display = 'none';
+    opts.innerHTML = '';
+  }
+
+  renderScores(scores, 'scoreBoard');
+}
+
+function showReveal(q, correctPlayers, scores, idx, total, players) {
+  document.getElementById('revealAnswer').textContent = q.correct_answer;
+  document.getElementById('qNum').textContent = idx + 1;
+
+  const namesEl = document.getElementById('correctNames');
+  if (correctPlayers && correctPlayers.length > 0) {
+    namesEl.innerHTML = correctPlayers.map((n, i) =>
+      `<div class="correct-name" style="animation-delay:${i * 0.08}s">${n}</div>`
+    ).join('');
+  } else {
+    namesEl.innerHTML = '<div class="no-correct">Nobody got it right this time!</div>';
+  }
+
+  // Update next button
+  const nextBtn = document.getElementById('nextBtn');
+  if (idx >= total - 1) {
+    nextBtn.textContent = 'SHOW RESULTS ▶';
+  } else {
+    nextBtn.textContent = `NEXT QUESTION (${idx + 2}/${total}) ▶`;
+  }
+
+  renderScores(scores, 'scoreBoard2');
+}
+
+function showWinner(winner, scores) {
+  document.getElementById('winnerName').textContent = winner || '???';
+  if (winner) startConfetti();
+}
+
+function renderScores(scores, elId) {
+  const el = document.getElementById(elId);
+  if (!scores || !scores.length) { el.innerHTML = ''; return; }
+  el.innerHTML = scores.slice(0, 8).map(s =>
+    `<div class="score-item"><span>${s.name}</span><span class="score-num">${s.correct}</span></div>`
+  ).join('');
+}
+
+async function startGame() {
+  await fetch(`/api/games/${gameId}/start`, { method: 'POST' });
+}
+async function revealAnswer() {
+  await fetch(`/api/games/${gameId}/reveal`, { method: 'POST' });
+}
+async function nextQuestion() {
+  await fetch(`/api/games/${gameId}/next`, { method: 'POST' });
+}
+async function autoWinner() {
+  await fetch(`/api/games/${gameId}/auto-winner`, { method: 'POST' });
+}
+async function setManualWinner() {
+  const w = document.getElementById('manualWinner').value;
+  await fetch(`/api/games/${gameId}/winner`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ winner: w }) });
+}
+async function backToLobby() {
+  if (!confirm('Reset game and return to lobby? All answers will be cleared.')) return;
+  await fetch(`/api/games/${gameId}/reset`, { method: 'POST' });
+}
+
+// ─── CONFETTI ─────────────────────────────────────────────────────────────────
+let confettiActive = false;
+function startConfetti() {
+  if (confettiActive) return;
+  confettiActive = true;
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const colors = ['#f0c040','#e05a2b','#3ddc84','#4fa3e0','#ff4757','#a855f7','#fff'];
+  const pieces = Array.from({length: 180}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height,
+    size: Math.random() * 10 + 4,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    vx: (Math.random() - 0.5) * 4,
+    vy: Math.random() * 4 + 2,
+    rot: Math.random() * Math.PI * 2,
+    vrot: (Math.random() - 0.5) * 0.2,
+    shape: Math.random() > 0.5 ? 'rect' : 'circle'
+  }));
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.5);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size/2, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+      p.x += p.vx; p.y += p.vy; p.rot += p.vrot;
+      if (p.y > canvas.height) { p.y = -20; p.x = Math.random() * canvas.width; }
+    });
+    if (confettiActive) requestAnimationFrame(draw);
+  }
+  draw();
+  setTimeout(() => { confettiActive = false; ctx.clearRect(0,0,canvas.width,canvas.height); }, 8000);
+}
+
+window.addEventListener('resize', () => {
+  const canvas = document.getElementById('confettiCanvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+if (gameId) connect();
+</script>
+</body>
+</html>
