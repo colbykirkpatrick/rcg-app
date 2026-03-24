@@ -80,6 +80,9 @@ function buildGameState(gameId) {
     correct: answers.filter(a => a.player_id === p.id && a.is_correct).length
   })).sort((a, b) => b.correct - a.correct || a.name.localeCompare(b.name));
 
+  // Which avatars are already claimed (for exclusive-pick logic)
+  const claimedAvatars = players.filter(p => p.avatar).map(p => ({ playerId: p.id, avatar: p.avatar }));
+
   return {
     game,
     questions,
@@ -88,6 +91,7 @@ function buildGameState(gameId) {
     answers: currentAnswers,
     correctPlayers,
     scores,
+    claimedAvatars,
     totalQuestions: questions.length,
     currentIndex: game.current_question_index,
     phase: game.phase,
@@ -283,12 +287,27 @@ app.delete('/api/games/:id/players/:pid', (req, res) => {
   res.json({ ok: true });
 });
 
-// Set player avatar
+// Set player avatar (with exclusive-pick logic: lock when < 19 players)
 app.post('/api/players/:pid/avatar', (req, res) => {
-  const { avatar } = req.body; // avatar = number 1-12
-  getPlayers().find({ id: req.params.pid }).assign({ avatar }).write();
+  const { avatar } = req.body;
   const player = getPlayers().find({ id: req.params.pid }).value();
-  if (player) broadcastPlayerList(player.game_id);
+  if (!player) return res.status(404).json({ error: 'Player not found' });
+
+  const gameId = player.game_id;
+  const totalPlayers = getPlayers().filter({ game_id: gameId }).size().value();
+
+  // If < 19 players, check if avatar is already claimed by someone else
+  if (totalPlayers < 19) {
+    const alreadyClaimed = getPlayers().value().find(p =>
+      p.game_id === gameId && p.avatar === avatar && p.id !== req.params.pid
+    );
+    if (alreadyClaimed) {
+      return res.status(409).json({ error: 'Character already taken! Pick another one.' });
+    }
+  }
+
+  getPlayers().find({ id: req.params.pid }).assign({ avatar }).write();
+  broadcastPlayerList(gameId);
   res.json({ ok: true });
 });
 
