@@ -8,124 +8,162 @@
 @font-face { font-family: 'Voska'; src: url('/VoskaRoundBoldOblique.otf') format('opentype'); }
 @font-face { font-family: 'Arrakis'; src: url('/Arrakis.otf') format('opentype'); }
 :root {
-  --blue: #6B82E8; --blue-dark: #5068d4; --blue-mid: #7d94ec;
-  --yellow: #F5D73A; --yellow-dark: #e0c220;
-  --white: #FFFFFF; --black: #111111;
-  --green: #4ade80; --red: #ff6b6b;
+  --blue:#6B82E8; --blue-dark:#5068d4; --blue-mid:#7d94ec;
+  --yellow:#F5D73A; --yellow-dark:#e0c220;
+  --white:#FFFFFF; --black:#111111;
+  --green:#4ade80; --red:#ff6b6b;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; }
-body { background: var(--blue); color: var(--white); font-family: 'Arrakis', sans-serif; display: flex; flex-direction: column; }
-.screen { display: none; flex-direction: column; height: 100%; overflow: hidden; position: relative; }
-.screen.active { display: flex; }
-.screen::before { content: ''; position: absolute; inset: 0; background-image: url('/characters.svg'); background-size: 400px auto; background-repeat: repeat; opacity: 0.05; z-index: 0; pointer-events: none; }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; overflow:hidden; }
+body { background:var(--blue); color:var(--white); font-family:'Arrakis',sans-serif; display:flex; flex-direction:column; }
+.screen { display:none; flex-direction:column; height:100%; overflow:hidden; position:relative; }
+.screen.active { display:flex; }
+.screen::before { content:''; position:absolute; inset:0; background-image:url('/characters.svg'); background-size:400px auto; background-repeat:repeat; opacity:0.05; z-index:0; pointer-events:none; }
 
 /* ── JOIN ── */
-#join { padding: 28px 20px; align-items: center; justify-content: center; }
-.join-logo { font-family: 'Voska', serif; font-style: italic; font-size: 30px; color: var(--white); -webkit-text-stroke: 2px var(--black); filter: drop-shadow(2px 3px 0 var(--black)); text-align: center; margin-bottom: 24px; position: relative; z-index: 2; animation: logoBounce 3s ease-in-out infinite; }
-@keyframes logoBounce { 0%,100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg) translateY(-3px); } }
-.join-card { background: var(--black); border: 4px solid var(--yellow); border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 400px; position: relative; z-index: 2; box-shadow: 6px 6px 0 var(--yellow-dark); }
-.join-title { font-family: 'Voska', serif; font-style: italic; font-size: 34px; color: var(--yellow); text-align: center; margin-bottom: 20px; filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.4)); }
-.field { margin-bottom: 16px; }
-label { display: block; font-size: 10px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; color: var(--yellow); margin-bottom: 6px; }
-input { background: rgba(255,255,255,0.1); border: 3px solid rgba(255,255,255,0.2); border-radius: 12px; color: var(--white); font-family: 'Arrakis', sans-serif; font-size: 18px; padding: 12px 14px; width: 100%; outline: none; transition: border-color 0.2s; -webkit-appearance: none; }
-input:focus { border-color: var(--yellow); background: rgba(255,255,255,0.15); }
-input::placeholder { color: rgba(255,255,255,0.3); }
-input.code-input { font-family: 'Voska', serif; font-style: italic; font-size: 36px; letter-spacing: 8px; text-transform: uppercase; text-align: center; color: var(--yellow); }
-.btn { font-family: 'Voska', serif; font-style: italic; font-size: 22px; padding: 14px; border: 3px solid var(--black); border-radius: 12px; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: var(--yellow); color: var(--black); box-shadow: 4px 4px 0 rgba(0,0,0,0.3); }
-.btn:active { transform: scale(0.97) translate(1px,1px); box-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
-.btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-ghost { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.4); box-shadow: none; }
-.error-msg { background: rgba(255,50,50,0.2); border: 2px solid #ff6b6b; border-radius: 10px; color: #ffaaaa; font-family: 'Arrakis', sans-serif; font-size: 14px; padding: 10px 14px; margin-bottom: 12px; display: none; text-align: center; }
-.error-msg.show { display: block; }
+#join { padding:28px 20px; align-items:center; justify-content:center; }
+.join-logo { font-family:'Voska',serif; font-style:italic; font-size:30px; color:var(--white); -webkit-text-stroke:2px var(--black); filter:drop-shadow(2px 3px 0 var(--black)); text-align:center; margin-bottom:24px; position:relative; z-index:2; animation:logoBounce 3s ease-in-out infinite; }
+@keyframes logoBounce { 0%,100%{transform:rotate(-1deg);} 50%{transform:rotate(1deg) translateY(-3px);} }
+.join-card { background:var(--black); border:4px solid var(--yellow); border-radius:20px; padding:24px 20px; width:100%; max-width:400px; position:relative; z-index:2; box-shadow:6px 6px 0 var(--yellow-dark); }
+.join-title { font-family:'Voska',serif; font-style:italic; font-size:34px; color:var(--yellow); text-align:center; margin-bottom:20px; filter:drop-shadow(2px 3px 0 rgba(0,0,0,0.4)); }
+.field { margin-bottom:16px; }
+label { display:block; font-size:10px; font-weight:bold; letter-spacing:3px; text-transform:uppercase; color:var(--yellow); margin-bottom:6px; }
+input { background:rgba(255,255,255,0.1); border:3px solid rgba(255,255,255,0.2); border-radius:12px; color:var(--white); font-family:'Arrakis',sans-serif; font-size:18px; padding:12px 14px; width:100%; outline:none; transition:border-color 0.2s; -webkit-appearance:none; }
+input:focus { border-color:var(--yellow); background:rgba(255,255,255,0.15); }
+input::placeholder { color:rgba(255,255,255,0.3); }
+input.code-input { font-family:'Voska',serif; font-style:italic; font-size:36px; letter-spacing:8px; text-transform:uppercase; text-align:center; color:var(--yellow); }
+.btn { font-family:'Voska',serif; font-style:italic; font-size:22px; padding:14px; border:3px solid var(--black); border-radius:12px; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:var(--yellow); color:var(--black); box-shadow:4px 4px 0 rgba(0,0,0,0.3); }
+.btn:active { transform:scale(0.97) translate(1px,1px); box-shadow:2px 2px 0 rgba(0,0,0,0.3); }
+.btn:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-ghost { background:transparent; color:var(--white); border-color:rgba(255,255,255,0.4); box-shadow:none; }
+.error-msg { background:rgba(255,50,50,0.2); border:2px solid #ff6b6b; border-radius:10px; color:#ffaaaa; font-family:'Arrakis',sans-serif; font-size:14px; padding:10px 14px; margin-bottom:12px; display:none; text-align:center; }
+.error-msg.show { display:block; }
 
 /* ── AVATAR PICKER ── */
-#avatar-picker { padding: 20px 16px; align-items: center; overflow-y: auto; }
-.ap-header { position: relative; z-index: 2; text-align: center; margin-bottom: 20px; }
-.ap-title { font-family: 'Voska', serif; font-style: italic; font-size: 36px; color: var(--white); -webkit-text-stroke: 2px var(--black); filter: drop-shadow(2px 3px 0 var(--black)); margin-bottom: 6px; }
-.ap-sub { font-family: 'Arrakis', sans-serif; font-size: 13px; color: rgba(255,255,255,0.7); letter-spacing: 1px; }
-.avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 400px; position: relative; z-index: 2; margin-bottom: 16px; }
-.avatar-cell { background: var(--white); border: 3px solid var(--black); border-radius: 14px; padding: 6px; cursor: pointer; transition: all 0.15s; box-shadow: 3px 3px 0 var(--black); overflow: hidden; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
-.avatar-cell:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--black); }
-.avatar-cell.selected { border-color: var(--yellow); background: var(--yellow); box-shadow: 4px 4px 0 var(--black); transform: translate(-1px,-1px) scale(1.05); }
-.avatar-cell svg { width: 100%; height: 100%; }
-.ap-btn-row { position: relative; z-index: 2; width: 100%; max-width: 400px; }
-
-/* ── CHARACTER SVG HELPER ── */
-.char-svg { overflow: hidden; }
+#avatar-picker { padding:16px 14px; align-items:center; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.ap-header { position:relative; z-index:2; text-align:center; margin-bottom:14px; }
+.ap-title { font-family:'Voska',serif; font-style:italic; font-size:34px; color:var(--white); -webkit-text-stroke:2px var(--black); filter:drop-shadow(2px 3px 0 var(--black)); margin-bottom:4px; }
+.ap-sub { font-family:'Arrakis',sans-serif; font-size:12px; color:rgba(255,255,255,0.65); letter-spacing:1px; }
+.avatar-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; width:100%; max-width:420px; position:relative; z-index:2; margin-bottom:12px; }
+.avatar-cell {
+  background:var(--white);
+  border:3px solid var(--black);
+  border-radius:14px;
+  padding:6px;
+  cursor:pointer;
+  transition:all 0.15s;
+  box-shadow:3px 3px 0 var(--black);
+  overflow:hidden;
+  aspect-ratio:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.avatar-cell img { width:100%; height:100%; object-fit:contain; display:block; }
+.avatar-cell:active { transform:translate(1px,1px); box-shadow:1px 1px 0 var(--black); }
+.avatar-cell.selected { border-color:var(--yellow); background:var(--yellow); box-shadow:4px 4px 0 var(--black); transform:translate(-1px,-1px) scale(1.05); }
+.avatar-cell.taken {
+  opacity:0.3;
+  cursor:not-allowed;
+  filter:grayscale(80%);
+}
+.avatar-cell.taken::after {
+  content:'✕';
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:bold;
+  color:var(--red);
+  background:rgba(0,0,0,0.4);
+  border-radius:11px;
+}
+.ap-btn-row { position:relative; z-index:2; width:100%; max-width:420px; }
 
 /* ── WAITING ── */
-#waiting { align-items: center; justify-content: center; text-align: center; padding: 32px 20px; }
-.player-badge { font-family: 'Voska', serif; font-style: italic; font-size: 22px; color: var(--black); background: var(--yellow); border: 3px solid var(--black); border-radius: 40px; padding: 8px 20px; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 10px; position: relative; z-index: 2; box-shadow: 3px 3px 0 var(--black); transform: rotate(-1deg); }
-.waiting-title { font-family: 'Voska', serif; font-style: italic; font-size: 46px; color: var(--white); -webkit-text-stroke: 2px var(--black); filter: drop-shadow(3px 4px 0 var(--black)); margin-bottom: 8px; position: relative; z-index: 2; }
-.waiting-sub { font-family: 'Arrakis', sans-serif; color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 36px; position: relative; z-index: 2; letter-spacing: 1px; }
-.pulse-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto; z-index: 2; }
-.pulse-ring { width: 80px; height: 80px; border-radius: 50%; border: 4px solid var(--yellow); position: absolute; animation: ringPulse 1.5s ease-out infinite; }
-@keyframes ringPulse { 0% { transform: scale(0.8); opacity: 1; } 100% { transform: scale(1.7); opacity: 0; } }
-.pulse-dot { width: 48px; height: 48px; border-radius: 50%; background: var(--yellow); border: 3px solid var(--black); position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); box-shadow: 3px 3px 0 var(--black); overflow: hidden; }
-.keep-open { font-family: 'Arrakis', sans-serif; font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 2px; text-transform: uppercase; margin-top: 24px; position: relative; z-index: 2; }
+#waiting { align-items:center; justify-content:center; text-align:center; padding:32px 20px; }
+.player-badge { font-family:'Voska',serif; font-style:italic; font-size:22px; color:var(--black); background:var(--yellow); border:3px solid var(--black); border-radius:40px; padding:8px 20px; margin-bottom:20px; display:inline-flex; align-items:center; gap:10px; position:relative; z-index:2; box-shadow:3px 3px 0 var(--black); transform:rotate(-1deg); }
+.player-badge img { width:32px; height:32px; object-fit:contain; }
+.waiting-title { font-family:'Voska',serif; font-style:italic; font-size:46px; color:var(--white); -webkit-text-stroke:2px var(--black); filter:drop-shadow(3px 4px 0 var(--black)); margin-bottom:8px; position:relative; z-index:2; }
+.waiting-sub { font-family:'Arrakis',sans-serif; color:rgba(255,255,255,0.7); font-size:14px; margin-bottom:36px; position:relative; z-index:2; letter-spacing:1px; }
+.pulse-wrap { position:relative; width:80px; height:80px; margin:0 auto; z-index:2; }
+.pulse-ring { width:80px; height:80px; border-radius:50%; border:4px solid var(--yellow); position:absolute; animation:ringPulse 1.5s ease-out infinite; }
+@keyframes ringPulse { 0%{transform:scale(0.8);opacity:1;} 100%{transform:scale(1.7);opacity:0;} }
+.pulse-dot { width:52px; height:52px; border-radius:50%; background:var(--yellow); border:3px solid var(--black); position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); box-shadow:3px 3px 0 var(--black); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.pulse-dot img { width:44px; height:44px; object-fit:contain; }
+.keep-open { font-family:'Arrakis',sans-serif; font-size:11px; color:rgba(255,255,255,0.45); letter-spacing:2px; text-transform:uppercase; margin-top:24px; position:relative; z-index:2; }
 
 /* ── QUESTION ── */
-#question { overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--blue); }
-.q-header { background: var(--black); border-bottom: 4px solid var(--yellow); padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: relative; z-index: 5; }
-.q-header-name { font-family: 'Voska', serif; font-style: italic; font-size: 18px; color: var(--yellow); filter: drop-shadow(1px 2px 0 rgba(0,0,0,0.4)); display: flex; align-items: center; gap: 8px; }
-.q-header-num { font-family: 'Arrakis', sans-serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.6); background: var(--blue); padding: 4px 12px; border-radius: 20px; border: 2px solid var(--blue-mid); }
-.q-header-num span { color: var(--white); }
-.question-body { padding: 20px 16px; flex: 1; position: relative; z-index: 2; }
-.q-eyebrow { font-family: 'Arrakis', sans-serif; font-size: 10px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; color: var(--black); background: var(--yellow); padding: 4px 14px; border-radius: 20px; border: 2px solid var(--black); margin-bottom: 12px; display: inline-block; box-shadow: 2px 2px 0 var(--black); }
-.q-text { font-family: 'Voska', serif; font-style: italic; font-size: clamp(20px, 5vw, 26px); color: var(--white); -webkit-text-stroke: 1px var(--black); filter: drop-shadow(2px 3px 0 var(--black)); line-height: 1.3; margin-bottom: 22px; }
-.options-list { display: flex; flex-direction: column; gap: 10px; }
-.option-btn { background: var(--white); border: 3px solid var(--black); border-radius: 14px; padding: 13px 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.15s; width: 100%; text-align: left; box-shadow: 3px 3px 0 var(--black); }
-.option-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--black); }
-.option-btn.selected { background: var(--yellow); border-color: var(--black); transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--black); }
-.opt-key { font-family: 'Voska', serif; font-style: italic; font-size: 24px; color: var(--blue); width: 26px; flex-shrink: 0; -webkit-text-stroke: 1px var(--black); }
-.option-btn.selected .opt-key { color: var(--black); }
-.opt-label { font-family: 'Arrakis', sans-serif; font-size: 15px; color: var(--black); font-weight: bold; line-height: 1.3; }
+#question { overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--blue); }
+.q-header { background:var(--black); border-bottom:4px solid var(--yellow); padding:11px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; position:relative; z-index:5; }
+.q-header-name { font-family:'Voska',serif; font-style:italic; font-size:17px; color:var(--yellow); filter:drop-shadow(1px 2px 0 rgba(0,0,0,0.4)); display:flex; align-items:center; gap:8px; }
+.q-header-name img { width:28px; height:28px; object-fit:contain; }
+.q-header-num { font-family:'Arrakis',sans-serif; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.6); background:var(--blue); padding:4px 12px; border-radius:20px; border:2px solid var(--blue-mid); }
+.q-header-num span { color:var(--white); }
+.question-body { padding:18px 16px; flex:1; position:relative; z-index:2; }
+.q-eyebrow { font-family:'Arrakis',sans-serif; font-size:10px; font-weight:bold; letter-spacing:4px; text-transform:uppercase; color:var(--black); background:var(--yellow); padding:4px 14px; border-radius:20px; border:2px solid var(--black); margin-bottom:12px; display:inline-block; box-shadow:2px 2px 0 var(--black); }
+.q-text { font-family:'Voska',serif; font-style:italic; font-size:clamp(20px,5vw,26px); color:var(--white); -webkit-text-stroke:1px var(--black); filter:drop-shadow(2px 3px 0 var(--black)); line-height:1.3; margin-bottom:20px; }
 
-/* ── FILL IN THE BLANK ── */
-.fitb-area { display: flex; flex-direction: column; gap: 10px; }
-.fitb-label { font-family: 'Arrakis', sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 4px; }
-.player-name-list { display: flex; flex-direction: column; gap: 8px; max-height: 55vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.player-name-btn { background: var(--white); border: 3px solid var(--black); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.15s; width: 100%; text-align: left; box-shadow: 3px 3px 0 var(--black); }
-.player-name-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--black); }
-.player-name-btn.selected { background: var(--yellow); border-color: var(--black); transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--black); }
-.player-name-btn .pname { font-family: 'Voska', serif; font-style: italic; font-size: 22px; color: var(--black); flex: 1; }
-.player-name-btn .pav { width: 36px; height: 36px; flex-shrink: 0; }
+/* MC OPTIONS */
+.options-list { display:flex; flex-direction:column; gap:10px; }
+.option-btn { background:var(--white); border:3px solid var(--black); border-radius:14px; padding:13px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.15s; width:100%; text-align:left; box-shadow:3px 3px 0 var(--black); }
+.option-btn:active { transform:translate(1px,1px); box-shadow:1px 1px 0 var(--black); }
+.option-btn.selected { background:var(--yellow); border-color:var(--black); transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--black); }
+.opt-key { font-family:'Voska',serif; font-style:italic; font-size:24px; color:var(--blue); width:26px; flex-shrink:0; -webkit-text-stroke:1px var(--black); }
+.option-btn.selected .opt-key { color:var(--black); }
+.opt-label { font-family:'Arrakis',sans-serif; font-size:15px; color:var(--black); font-weight:bold; line-height:1.3; }
 
-.submit-area { padding: 12px 16px; flex-shrink: 0; background: var(--black); border-top: 4px solid var(--yellow); position: relative; z-index: 5; }
+/* FILL IN THE BLANK */
+.fitb-area { display:flex; flex-direction:column; gap:8px; }
+.fitb-label { font-family:'Arrakis',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.65); margin-bottom:2px; }
+.player-name-list { display:flex; flex-direction:column; gap:8px; max-height:52vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.player-name-btn { background:var(--white); border:3px solid var(--black); border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.15s; width:100%; text-align:left; box-shadow:3px 3px 0 var(--black); }
+.player-name-btn:active { transform:translate(1px,1px); box-shadow:1px 1px 0 var(--black); }
+.player-name-btn.selected { background:var(--yellow); border-color:var(--black); transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--black); }
+.player-name-btn .pav { width:36px; height:36px; flex-shrink:0; object-fit:contain; }
+.player-name-btn .pname { font-family:'Voska',serif; font-style:italic; font-size:22px; color:var(--black); flex:1; }
+.player-name-btn.selected .pname { color:var(--black); }
+
+.submit-area { padding:12px 16px; flex-shrink:0; background:var(--black); border-top:4px solid var(--yellow); position:relative; z-index:5; }
 
 /* ── SUBMITTED ── */
-#submitted { background: var(--blue); align-items: center; justify-content: center; text-align: center; padding: 28px 20px; }
-.submitted-icon { font-size: 70px; margin-bottom: 14px; animation: iconPop 0.4s cubic-bezier(0.34,1.56,0.64,1); position: relative; z-index: 2; filter: drop-shadow(3px 4px 0 var(--black)); }
-@keyframes iconPop { from { transform: scale(0) rotate(-10deg); } to { transform: scale(1) rotate(0); } }
-.submitted-title { font-family: 'Voska', serif; font-style: italic; font-size: 42px; color: var(--yellow); -webkit-text-stroke: 2px var(--black); filter: drop-shadow(3px 4px 0 var(--black)); margin-bottom: 10px; position: relative; z-index: 2; }
-.submitted-answer { background: var(--black); border: 3px solid var(--yellow); border-radius: 14px; padding: 11px 18px; font-family: 'Arrakis', sans-serif; font-size: 18px; font-weight: bold; color: var(--yellow); margin-bottom: 14px; display: inline-flex; align-items: center; gap: 10px; position: relative; z-index: 2; box-shadow: 4px 4px 0 var(--yellow-dark); }
-.submitted-waiting { font-family: 'Arrakis', sans-serif; color: rgba(255,255,255,0.65); font-size: 14px; position: relative; z-index: 2; letter-spacing: 1px; }
-.flip-hint { margin-top: 24px; background: var(--black); border: 3px solid rgba(255,255,255,0.15); border-radius: 14px; padding: 14px 16px; font-family: 'Arrakis', sans-serif; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; position: relative; z-index: 2; max-width: 340px; text-align: left; }
-.flip-hint strong { color: var(--yellow); }
+#submitted { background:var(--blue); align-items:center; justify-content:center; text-align:center; padding:28px 20px; }
+.submitted-icon { font-size:70px; margin-bottom:14px; animation:iconPop 0.4s cubic-bezier(0.34,1.56,0.64,1); position:relative; z-index:2; filter:drop-shadow(3px 4px 0 var(--black)); }
+@keyframes iconPop { from{transform:scale(0) rotate(-10deg);}to{transform:scale(1) rotate(0);} }
+.submitted-title { font-family:'Voska',serif; font-style:italic; font-size:42px; color:var(--yellow); -webkit-text-stroke:2px var(--black); filter:drop-shadow(3px 4px 0 var(--black)); margin-bottom:10px; position:relative; z-index:2; }
+.submitted-answer { background:var(--black); border:3px solid var(--yellow); border-radius:14px; padding:11px 18px; font-family:'Arrakis',sans-serif; font-size:18px; font-weight:bold; color:var(--yellow); margin-bottom:14px; display:inline-flex; align-items:center; gap:10px; position:relative; z-index:2; box-shadow:4px 4px 0 var(--yellow-dark); }
+.submitted-answer img { width:30px; height:30px; object-fit:contain; }
+.submitted-waiting { font-family:'Arrakis',sans-serif; color:rgba(255,255,255,0.65); font-size:14px; position:relative; z-index:2; letter-spacing:1px; }
+.flip-hint { margin-top:24px; background:var(--black); border:3px solid rgba(255,255,255,0.15); border-radius:14px; padding:14px 16px; font-family:'Arrakis',sans-serif; font-size:13px; color:rgba(255,255,255,0.6); line-height:1.6; position:relative; z-index:2; max-width:340px; text-align:left; }
+.flip-hint strong { color:var(--yellow); }
 
 /* ── REVEAL ── */
-#player-reveal { background: var(--blue); align-items: center; justify-content: center; text-align: center; padding: 28px 20px; }
-.reveal-icon { font-size: 62px; margin-bottom: 12px; animation: iconPop 0.5s cubic-bezier(0.34,1.56,0.64,1); position: relative; z-index: 2; filter: drop-shadow(3px 4px 0 var(--black)); }
-.reveal-result { font-family: 'Voska', serif; font-style: italic; font-size: 50px; -webkit-text-stroke: 2px var(--black); filter: drop-shadow(3px 5px 0 var(--black)); margin-bottom: 12px; position: relative; z-index: 2; }
-.reveal-result.correct { color: var(--yellow); }
-.reveal-result.wrong { color: #ff9999; }
-.reveal-info-box { background: var(--black); border: 3px solid var(--yellow); border-radius: 14px; padding: 12px 18px; margin-bottom: 10px; position: relative; z-index: 2; box-shadow: 4px 4px 0 var(--yellow-dark); max-width: 320px; width: 100%; }
-.reveal-info-label { font-family: 'Arrakis', sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--yellow); margin-bottom: 4px; }
-.reveal-info-value { font-family: 'Arrakis', sans-serif; font-size: 18px; font-weight: bold; color: var(--white); display: flex; align-items: center; justify-content: center; gap: 8px; }
-.next-hint { font-family: 'Arrakis', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-top: 24px; position: relative; z-index: 2; animation: blink 1.5s ease-in-out infinite; }
-@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+#player-reveal { background:var(--blue); align-items:center; justify-content:center; text-align:center; padding:28px 20px; }
+.reveal-icon { font-size:62px; margin-bottom:12px; animation:iconPop 0.5s cubic-bezier(0.34,1.56,0.64,1); position:relative; z-index:2; filter:drop-shadow(3px 4px 0 var(--black)); }
+.reveal-result { font-family:'Voska',serif; font-style:italic; font-size:50px; -webkit-text-stroke:2px var(--black); filter:drop-shadow(3px 5px 0 var(--black)); margin-bottom:12px; position:relative; z-index:2; }
+.reveal-result.correct { color:var(--yellow); }
+.reveal-result.wrong { color:#ff9999; }
+.reveal-info-box { background:var(--black); border:3px solid var(--yellow); border-radius:14px; padding:12px 18px; margin-bottom:10px; position:relative; z-index:2; box-shadow:4px 4px 0 var(--yellow-dark); max-width:320px; width:100%; }
+.reveal-info-label { font-family:'Arrakis',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--yellow); margin-bottom:4px; }
+.reveal-info-value { font-family:'Arrakis',sans-serif; font-size:18px; font-weight:bold; color:var(--white); display:flex; align-items:center; justify-content:center; gap:8px; }
+.reveal-info-value img { width:28px; height:28px; object-fit:contain; }
+.next-hint { font-family:'Arrakis',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-top:24px; position:relative; z-index:2; animation:blink 1.5s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
 
 /* ── FINISHED ── */
-#player-finished { background: var(--blue); align-items: center; justify-content: center; text-align: center; padding: 28px 20px; }
-.finished-trophy { font-size: 76px; animation: trophyBounce 0.9s ease-in-out infinite alternate; display: block; margin-bottom: 10px; position: relative; z-index: 2; filter: drop-shadow(3px 5px 0 var(--black)); }
-@keyframes trophyBounce { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-14px) rotate(4deg); } }
-.finished-title { font-family: 'Voska', serif; font-style: italic; font-size: 42px; color: var(--white); -webkit-text-stroke: 2px var(--black); filter: drop-shadow(3px 4px 0 var(--black)); margin-bottom: 4px; position: relative; z-index: 2; }
-.finished-score { font-family: 'Voska', serif; font-style: italic; font-size: 84px; color: var(--yellow); -webkit-text-stroke: 3px var(--black); filter: drop-shadow(4px 5px 0 var(--black)); line-height: 1; position: relative; z-index: 2; }
-.finished-score-label { font-family: 'Arrakis', sans-serif; color: rgba(255,255,255,0.65); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; position: relative; z-index: 2; }
-.winner-box { background: var(--black); border: 4px solid var(--yellow); border-radius: 16px; padding: 14px 22px; margin-bottom: 18px; position: relative; z-index: 2; box-shadow: 5px 5px 0 var(--yellow-dark); max-width: 300px; width: 100%; }
-.w-label { font-family: 'Arrakis', sans-serif; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
-.w-name { font-family: 'Voska', serif; font-style: italic; font-size: 36px; color: var(--yellow); -webkit-text-stroke: 1px var(--black); display: flex; align-items: center; justify-content: center; gap: 10px; }
+#player-finished { background:var(--blue); align-items:center; justify-content:center; text-align:center; padding:28px 20px; overflow-y:auto; }
+.finished-trophy { font-size:76px; animation:trophyBounce 0.9s ease-in-out infinite alternate; display:block; margin-bottom:10px; position:relative; z-index:2; filter:drop-shadow(3px 5px 0 var(--black)); }
+@keyframes trophyBounce { from{transform:translateY(0) rotate(-4deg);}to{transform:translateY(-14px) rotate(4deg);} }
+.finished-title { font-family:'Voska',serif; font-style:italic; font-size:42px; color:var(--white); -webkit-text-stroke:2px var(--black); filter:drop-shadow(3px 4px 0 var(--black)); margin-bottom:4px; position:relative; z-index:2; }
+.finished-score { font-family:'Voska',serif; font-style:italic; font-size:84px; color:var(--yellow); -webkit-text-stroke:3px var(--black); filter:drop-shadow(4px 5px 0 var(--black)); line-height:1; position:relative; z-index:2; }
+.finished-score-label { font-family:'Arrakis',sans-serif; color:rgba(255,255,255,0.65); font-size:13px; letter-spacing:3px; text-transform:uppercase; margin-bottom:24px; position:relative; z-index:2; }
+.winner-box { background:var(--black); border:4px solid var(--yellow); border-radius:16px; padding:14px 22px; margin-bottom:18px; position:relative; z-index:2; box-shadow:5px 5px 0 var(--yellow-dark); max-width:300px; width:100%; }
+.w-label { font-family:'Arrakis',sans-serif; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:6px; }
+.w-name { font-family:'Voska',serif; font-style:italic; font-size:36px; color:var(--yellow); -webkit-text-stroke:1px var(--black); display:flex; align-items:center; justify-content:center; gap:10px; }
+.w-name img { width:48px; height:48px; object-fit:contain; }
 </style>
 </head>
 <body>
@@ -152,11 +190,11 @@ input.code-input { font-family: 'Voska', serif; font-style: italic; font-size: 3
 <div class="screen" id="avatar-picker">
   <div class="ap-header">
     <div class="ap-title">Pick Your Character</div>
-    <div class="ap-sub">This is you for the whole game</div>
+    <div class="ap-sub" id="apSub">This is you for the whole game</div>
   </div>
   <div class="avatar-grid" id="avatarGrid"></div>
   <div class="ap-btn-row">
-    <button class="btn" id="avatarConfirmBtn" onclick="confirmAvatar()" disabled>Choose This One →</button>
+    <button class="btn" id="avatarConfirmBtn" onclick="confirmAvatar()" disabled>Pick a character first</button>
   </div>
 </div>
 
@@ -170,7 +208,7 @@ input.code-input { font-family: 'Voska', serif; font-style: italic; font-size: 3
   <div class="waiting-sub">Waiting for the host to start...</div>
   <div class="pulse-wrap">
     <div class="pulse-ring"></div>
-    <div class="pulse-dot" id="waitingDot"></div>
+    <div class="pulse-dot" id="waitingDot">⏳</div>
   </div>
   <div class="keep-open">Keep this screen open</div>
 </div>
@@ -227,174 +265,211 @@ input.code-input { font-family: 'Voska', serif; font-style: italic; font-size: 3
     <div class="w-label">Tonight's Winner</div>
     <div class="w-name" id="finishedWinner">—</div>
   </div>
-  <button class="btn btn-ghost" onclick="location.href='/player'" style="max-width:280px; margin-top:8px;">Play Again</button>
+  <button class="btn btn-ghost" onclick="location.href='/player'" style="max-width:280px;margin-top:8px;">Play Again</button>
 </div>
 
 <script>
-// ── Character avatar definitions (viewBox crops of characters.svg) ──
-const CHARS = [
-  { id:1,  vb:'0 0 361 346',    label:'Teal Guy'    },
-  { id:2,  vb:'361 0 361 346',  label:'Fire Dude'   },
-  { id:3,  vb:'722 0 361 346',  label:'Purple Hair' },
-  { id:4,  vb:'1083 0 361 346', label:'Pink Blob'   },
-  { id:5,  vb:'0 346 361 346',  label:'Orange Hero' },
-  { id:6,  vb:'361 346 361 346',label:'Red Runner'  },
-  { id:7,  vb:'722 346 361 346',label:'Yellow Pal'  },
-  { id:8,  vb:'1083 346 361 346',label:'Blue Bunny' },
-  { id:9,  vb:'0 693 361 346',  label:'Brown Buddy' },
-  { id:10, vb:'361 693 361 346',label:'Green Pal'   },
-  { id:11, vb:'722 693 361 346',label:'Purple Ghost'},
-  { id:12, vb:'1083 693 361 346',label:'Pink Devil' },
-];
+// ── Character IDs (no 12) ──────────────────────────────────────────────────
+const CHAR_IDS = [1,2,3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,19,20];
 
-function charSvg(id, size=40) {
-  const c = CHARS.find(x => x.id === id);
-  if (!c) return '';
-  return `<svg width="${size}" height="${size}" viewBox="${c.vb}" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden;border-radius:4px;"><image href="/characters.svg" width="1444" height="1039" x="-${parseInt(c.vb)}" y="-${parseInt(c.vb.split(' ')[1])}" /></svg>`;
+function charImg(id, size=40) {
+  if (!id) return '';
+  return `<img src="/char-${id}.svg" width="${size}" height="${size}" style="object-fit:contain;" alt="character">`;
 }
 
-// Render avatar grid
+// ── State ──────────────────────────────────────────────────────────────────
+let gameId=null, playerId=null, playerName=null;
+let currentQuestion=null, selectedAnswer=null;
+let myAnswers={}, evtSource=null;
+let selectedAvatarId=null, gameType='multiple_choice';
+let allPlayers=[], claimedAvatars=[];
+
+const params=new URLSearchParams(location.search);
+if (params.get('code')) document.getElementById('joinCode').value=params.get('code').toUpperCase();
+
+// ── Avatar grid ────────────────────────────────────────────────────────────
 function renderAvatarGrid() {
-  const grid = document.getElementById('avatarGrid');
-  grid.innerHTML = CHARS.map(c => `
-    <div class="avatar-cell" id="avcell-${c.id}" onclick="selectAvatar(${c.id})">
-      <svg viewBox="${c.vb}" xmlns="http://www.w3.org/2000/svg" style="overflow:hidden;">
-        <image href="/characters.svg" width="1444" height="1039"
-          x="${-parseInt(c.vb.split(' ')[0])}"
-          y="${-parseInt(c.vb.split(' ')[1])}" />
-      </svg>
-    </div>
-  `).join('');
+  const grid=document.getElementById('avatarGrid');
+  grid.innerHTML=CHAR_IDS.map(id => {
+    const isTaken = claimedAvatars.some(c => c.avatar===id && c.playerId!==playerId);
+    return `<div class="avatar-cell${isTaken?' taken':''}" id="avcell-${id}" onclick="selectAvatar(${id},${isTaken})">
+      <img src="/char-${id}.svg" alt="character ${id}">
+    </div>`;
+  }).join('');
+  // Re-mark selected if already chosen
+  if (selectedAvatarId) {
+    document.getElementById(`avcell-${selectedAvatarId}`)?.classList.add('selected');
+  }
 }
 
-let gameId = null, playerId = null, playerName = null;
-let currentQuestion = null, selectedAnswer = null;
-let myAnswers = {}, evtSource = null;
-let selectedAvatarId = null, gameType = 'multiple_choice';
-let allPlayers = [];
+function selectAvatar(id, isTaken) {
+  if (isTaken) return;
+  selectedAvatarId=id;
+  document.querySelectorAll('.avatar-cell').forEach(c=>c.classList.remove('selected'));
+  document.getElementById(`avcell-${id}`)?.classList.add('selected');
+  const btn=document.getElementById('avatarConfirmBtn');
+  btn.disabled=false;
+  btn.textContent='Play as this one →';
+}
 
-const params = new URLSearchParams(location.search);
-if (params.get('code')) document.getElementById('joinCode').value = params.get('code').toUpperCase();
-
-renderAvatarGrid();
-
+// ── Screens ────────────────────────────────────────────────────────────────
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
 function showError(msg) {
-  const el = document.getElementById('joinError');
-  el.textContent = msg;
-  el.classList.add('show');
+  const el=document.getElementById('joinError');
+  el.textContent=msg; el.classList.add('show');
 }
 
+// ── Join ───────────────────────────────────────────────────────────────────
 async function joinGame() {
-  const code = document.getElementById('joinCode').value.trim().toUpperCase();
-  const name = document.getElementById('joinName').value.trim();
+  const code=document.getElementById('joinCode').value.trim().toUpperCase();
+  const name=document.getElementById('joinName').value.trim();
   if (!code) return showError('Enter a game code');
   if (!name) return showError('Enter your name');
-  const btn = document.querySelector('#join .btn');
-  btn.disabled = true; btn.textContent = 'Joining...';
+  const btn=document.querySelector('#join .btn');
+  btn.disabled=true; btn.textContent='Joining...';
   try {
-    const r = await fetch('/api/join', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({gameCode:code,playerName:name}) });
-    const data = await r.json();
+    const r=await fetch('/api/join',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({gameCode:code,playerName:name})});
+    const data=await r.json();
     if (data.error) { showError(data.error); btn.disabled=false; btn.textContent='JOIN →'; return; }
-    gameId=data.gameId; playerId=data.playerId; playerName=data.playerName; gameType=data.gameType||'multiple_choice';
+    gameId=data.gameId; playerId=data.playerId; playerName=data.playerName;
+    gameType=data.gameType||'multiple_choice';
+    renderAvatarGrid();
     showScreen('avatar-picker');
   } catch(e) { showError('Connection error. Try again.'); btn.disabled=false; btn.textContent='JOIN →'; }
 }
 
-function selectAvatar(id) {
-  selectedAvatarId = id;
-  document.querySelectorAll('.avatar-cell').forEach(c => c.classList.remove('selected'));
-  document.getElementById(`avcell-${id}`).classList.add('selected');
-  document.getElementById('avatarConfirmBtn').disabled = false;
-  document.getElementById('avatarConfirmBtn').textContent = `Play as this one →`;
-}
-
+// ── Confirm avatar ─────────────────────────────────────────────────────────
 async function confirmAvatar() {
   if (!selectedAvatarId) return;
-  await fetch(`/api/players/${playerId}/avatar`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({avatar:selectedAvatarId}) });
-  // Update waiting screen
-  document.getElementById('waitingName').textContent = playerName;
-  document.getElementById('qHeaderName').innerHTML = charSvg(selectedAvatarId, 28) + playerName;
-  document.getElementById('waitingAvatar').innerHTML = charSvg(selectedAvatarId, 32);
-  // Show avatar in pulse dot too
-  const dot = document.getElementById('waitingDot');
-  dot.innerHTML = `<svg viewBox="${CHARS[selectedAvatarId-1].vb}" width="42" height="42" style="overflow:hidden;" xmlns="http://www.w3.org/2000/svg"><image href="/characters.svg" width="1444" height="1039" x="${-parseInt(CHARS[selectedAvatarId-1].vb.split(' ')[0])}" y="${-parseInt(CHARS[selectedAvatarId-1].vb.split(' ')[1])}" /></svg>`;
-  dot.style.padding = '0';
-  showScreen('waiting');
-  connect();
+  const btn=document.getElementById('avatarConfirmBtn');
+  btn.disabled=true; btn.textContent='Saving...';
+  try {
+    const r=await fetch(`/api/players/${playerId}/avatar`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({avatar:selectedAvatarId})});
+    const data=await r.json();
+    if (data.error) {
+      // Someone snagged it just now — refresh grid and show error
+      btn.disabled=false; btn.textContent='Pick a character first';
+      selectedAvatarId=null;
+      document.querySelectorAll('.avatar-cell').forEach(c=>c.classList.remove('selected'));
+      document.getElementById('apSub').textContent=data.error;
+      document.getElementById('apSub').style.color='#ff9999';
+      return;
+    }
+    // Update waiting screen
+    document.getElementById('waitingName').textContent=playerName;
+    document.getElementById('waitingAvatar').innerHTML=charImg(selectedAvatarId,32);
+    document.getElementById('waitingDot').innerHTML=`<img src="/char-${selectedAvatarId}.svg" width="44" height="44" style="object-fit:contain;">`;
+    document.getElementById('qHeaderName').innerHTML=`<img src="/char-${selectedAvatarId}.svg" width="28" height="28" style="object-fit:contain;">${playerName}`;
+    showScreen('waiting');
+    connect();
+  } catch(e) { btn.disabled=false; btn.textContent='Try Again'; }
 }
 
+// ── SSE ────────────────────────────────────────────────────────────────────
 function connect() {
   if (evtSource) evtSource.close();
-  evtSource = new EventSource(`/api/events/${gameId}?role=player&playerId=${playerId}`);
-  evtSource.addEventListener('state', e => applyState(JSON.parse(e.data)));
-  evtSource.onerror = () => setTimeout(connect, 2000);
+  evtSource=new EventSource(`/api/events/${gameId}?role=player&playerId=${playerId}`);
+  evtSource.addEventListener('state',e=>applyState(JSON.parse(e.data)));
+  evtSource.onerror=()=>setTimeout(connect,2000);
 }
 
 function applyState(s) {
   if (!s||!s.game) return;
-  const { game, currentQuestion:q, phase, winner, winnerAvatar, scores, currentIndex, players } = s;
-  allPlayers = players || [];
-  gameType = game.game_type || 'multiple_choice';
+  const {game,currentQuestion:q,phase,winner,winnerAvatar,scores,currentIndex,players,claimedAvatars:ca}=s;
+  allPlayers=players||[];
+  gameType=game.game_type||'multiple_choice';
+
+  // Update claimed avatars for picker (in case still on picker screen)
+  if (ca) {
+    claimedAvatars=ca;
+    if (document.getElementById('avatar-picker').classList.contains('active')) {
+      renderAvatarGrid();
+    }
+  }
 
   if (phase==='waiting'||game.status==='draft') { showScreen('waiting'); return; }
+
   if (phase==='question'&&q) {
     currentQuestion=q; selectedAnswer=null;
     const myAnswer=myAnswers[q.id];
-    if (myAnswer) { document.getElementById('submittedAnswer').innerHTML = myAnswer.avatarHtml + myAnswer.answer; showScreen('submitted'); }
-    else { renderQuestion(q,currentIndex); showScreen('question'); }
+    if (myAnswer) {
+      // Rebuild submitted answer display
+      const answerDisplay=document.getElementById('submittedAnswer');
+      answerDisplay.innerHTML='';
+      if (myAnswer.avatarId) answerDisplay.innerHTML+=charImg(myAnswer.avatarId,30);
+      answerDisplay.innerHTML+=myAnswer.answer;
+      showScreen('submitted');
+    } else {
+      renderQuestion(q,currentIndex);
+      showScreen('question');
+    }
     return;
   }
+
   if (phase==='reveal'&&q) {
     const myAnswer=myAnswers[q.id];
-    document.getElementById('revealCorrect').textContent = q.correct_answer;
+    // Correct answer display — find that player's avatar if FITB
+    const correctPlayer=allPlayers.find(p=>p.name.toLowerCase()===q.correct_answer.toLowerCase());
+    const correctAvImg=correctPlayer&&correctPlayer.avatar?charImg(correctPlayer.avatar,28):'';
+    document.getElementById('revealCorrect').innerHTML=correctAvImg+q.correct_answer;
+
     if (myAnswer) {
-      document.getElementById('revealMine').textContent = myAnswer.answer;
-      if (myAnswer.isCorrect) { document.getElementById('revealIcon').textContent='🎉'; document.getElementById('revealResult').textContent='Correct!'; document.getElementById('revealResult').className='reveal-result correct'; }
-      else { document.getElementById('revealIcon').textContent='😬'; document.getElementById('revealResult').textContent='Wrong!'; document.getElementById('revealResult').className='reveal-result wrong'; }
+      const myAvImg=myAnswer.avatarId?charImg(myAnswer.avatarId,28):'';
+      document.getElementById('revealMine').innerHTML=myAvImg+myAnswer.answer;
+      if (myAnswer.isCorrect) {
+        document.getElementById('revealIcon').textContent='🎉';
+        document.getElementById('revealResult').textContent='Correct!';
+        document.getElementById('revealResult').className='reveal-result correct';
+      } else {
+        document.getElementById('revealIcon').textContent='😬';
+        document.getElementById('revealResult').textContent='Wrong!';
+        document.getElementById('revealResult').className='reveal-result wrong';
+      }
     } else {
       document.getElementById('revealMine').textContent='(no answer)';
-      document.getElementById('revealIcon').textContent='😶'; document.getElementById('revealResult').textContent='Missed!'; document.getElementById('revealResult').className='reveal-result wrong';
+      document.getElementById('revealIcon').textContent='😶';
+      document.getElementById('revealResult').textContent='Missed!';
+      document.getElementById('revealResult').className='reveal-result wrong';
     }
     showScreen('player-reveal'); return;
   }
+
   if (phase==='finished'||phase==='winner') {
     const myScoreData=scores?scores.find(s=>s.id===playerId):null;
     document.getElementById('myScore').textContent=myScoreData?myScoreData.correct:0;
     if (winner) {
       document.getElementById('winnerBox').style.display='block';
-      const wAvHtml = winnerAvatar ? charSvg(winnerAvatar, 40) : '';
-      document.getElementById('finishedWinner').innerHTML = wAvHtml + winner;
+      const wImgEl=document.getElementById('finishedWinner');
+      wImgEl.innerHTML=(winnerAvatar?`<img src="/char-${winnerAvatar}.svg" width="48" height="48" style="object-fit:contain;">`:'') + winner;
     }
     showScreen('player-finished');
   }
 }
 
+// ── Render question ────────────────────────────────────────────────────────
 function renderQuestion(q, idx) {
-  document.getElementById('qText').textContent = q.question_text;
-  document.getElementById('qHeaderNum').textContent = idx+1;
+  document.getElementById('qText').textContent=q.question_text;
+  document.getElementById('qHeaderNum').textContent=idx+1;
   selectedAnswer=null;
   const submitBtn=document.getElementById('submitBtn');
   submitBtn.textContent='Select an Answer'; submitBtn.disabled=true;
   const area=document.getElementById('answerArea');
 
   if (gameType==='fill_in_the_blank') {
-    // Show all players as selectable buttons (excluding self)
-    const otherPlayers = allPlayers.filter(p => p.id !== playerId);
-    area.innerHTML = `
-      <div class="fitb-area">
-        <div class="fitb-label">Who is it?</div>
-        <div class="player-name-list">${otherPlayers.map(p => `
-          <button class="player-name-btn" onclick="selectPlayerAnswer(this,'${p.name}')" data-val="${p.name}">
-            ${p.avatar ? `<div class="pav">${charSvg(p.avatar, 36)}</div>` : ''}
-            <span class="pname">${p.name}</span>
-          </button>`).join('')}
-        </div>
-      </div>`;
+    // Show ALL players (including self — you might be the answer!)
+    const sortedPlayers=[...allPlayers].sort((a,b)=>a.name.localeCompare(b.name));
+    area.innerHTML=`<div class="fitb-area">
+      <div class="fitb-label">Who is it? Tap a name:</div>
+      <div class="player-name-list">${sortedPlayers.map(p=>`
+        <button class="player-name-btn" onclick="selectPlayerAnswer(this,'${p.name.replace(/'/g,"\\'")}',${p.avatar||'null'})">
+          ${p.avatar?`<img src="/char-${p.avatar}.svg" class="pav" alt="">`:'<div style="width:36px;flex-shrink:0;"></div>'}
+          <span class="pname">${p.name}</span>
+        </button>`).join('')}
+      </div>
+    </div>`;
   } else if (q.option_a) {
     const letters=['A','B','C','D'];
     const options=[q.option_a,q.option_b,q.option_c,q.option_d].filter(Boolean);
@@ -405,26 +480,27 @@ function renderQuestion(q, idx) {
       </button>`).join('')}</div>`;
   } else {
     area.innerHTML=`<input class="open-input" id="openAnswer" type="text" placeholder="Type your answer..."
-      style="background:white;border:3px solid var(--black);border-radius:14px;color:var(--black);font-size:20px;font-family:'Arrakis',sans-serif;padding:14px;box-shadow:3px 3px 0 var(--black);"
+      style="background:white;border:3px solid var(--black);border-radius:14px;color:var(--black);font-size:20px;font-family:'Arrakis',sans-serif;padding:14px;box-shadow:3px 3px 0 var(--black);width:100%;"
       oninput="handleOpenInput(this.value)"
       onkeydown="if(event.key==='Enter'&&!document.getElementById('submitBtn').disabled)submitAnswer()">`;
     setTimeout(()=>document.getElementById('openAnswer')?.focus(),100);
   }
 }
 
-function selectOption(btn, val) {
+function selectOption(btn,val) {
   document.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected'); selectedAnswer=val;
+  btn.classList.add('selected'); selectedAnswer={val,avatarId:null};
   const s=document.getElementById('submitBtn'); s.disabled=false; s.textContent=`Lock In ${val} →`;
 }
-function selectPlayerAnswer(btn, name) {
+function selectPlayerAnswer(btn,name,avatarId) {
   document.querySelectorAll('.player-name-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected'); selectedAnswer=name;
+  btn.classList.add('selected'); selectedAnswer={val:name,avatarId:avatarId||null};
   const s=document.getElementById('submitBtn'); s.disabled=false; s.textContent=`Lock In: ${name} →`;
 }
 function handleOpenInput(val) {
-  selectedAnswer=val.trim();
-  const s=document.getElementById('submitBtn'); s.disabled=!selectedAnswer; s.textContent=selectedAnswer?'Lock In Answer →':'Type Your Answer';
+  selectedAnswer=val.trim()?{val:val.trim(),avatarId:null}:null;
+  const s=document.getElementById('submitBtn');
+  s.disabled=!selectedAnswer; s.textContent=selectedAnswer?'Lock In Answer →':'Type Your Answer';
 }
 
 async function submitAnswer() {
@@ -432,11 +508,17 @@ async function submitAnswer() {
   const submitBtn=document.getElementById('submitBtn');
   submitBtn.disabled=true; submitBtn.textContent='Submitting...';
   try {
-    const r=await fetch(`/api/games/${gameId}/answers`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({questionId:currentQuestion.id,playerId,answer:selectedAnswer})});
+    const r=await fetch(`/api/games/${gameId}/answers`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({questionId:currentQuestion.id,playerId,answer:selectedAnswer.val})
+    });
     const data=await r.json();
-    const avatarHtml = selectedAvatarId ? charSvg(selectedAvatarId, 28) : '';
-    myAnswers[currentQuestion.id]={answer:selectedAnswer,isCorrect:data.isCorrect,avatarHtml};
-    document.getElementById('submittedAnswer').innerHTML = avatarHtml + selectedAnswer;
+    myAnswers[currentQuestion.id]={answer:selectedAnswer.val,isCorrect:data.isCorrect,avatarId:selectedAnswer.avatarId};
+    const answerDisplay=document.getElementById('submittedAnswer');
+    answerDisplay.innerHTML='';
+    if (selectedAnswer.avatarId) answerDisplay.innerHTML+=charImg(selectedAnswer.avatarId,30);
+    answerDisplay.innerHTML+=selectedAnswer.val;
     showScreen('submitted');
   } catch(e) { submitBtn.disabled=false; submitBtn.textContent='Try Again'; }
 }
